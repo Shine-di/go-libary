@@ -11,6 +11,20 @@ import (
 
 var session *mgo.Session
 
+
+type MongoConfig struct {
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Database string `json:"database"`
+	Open     int64  `json:"open"`
+	Idle     int64  `json:"idle"`
+}
+
+
+
+
 func Conn() *mgo.Session {
 	if session == nil {
 		panic("获取mongo连接为空")
@@ -21,13 +35,13 @@ func Conn() *mgo.Session {
 	return session
 }
 
-func InitConnect() {
+func InitConnect(config MongoConfig) {
 	dialInfo := mgo.DialInfo{
-		Addrs:    []string{config.MONGO_ADDRESS},
+		Addrs:    []string{config.Host},
 		Timeout:  time.Second * 3,
-		Database: config.MONGO_DATABASE,
-		Username: config.MONGO_USER,
-		Password: config.MONGO_PASSWORD,
+		Database: config.Database,
+		Username: config.User,
+		Password: config.Password,
 	}
 	ses, err := mgo.DialWithInfo(&dialInfo)
 	if err != nil {
@@ -41,7 +55,7 @@ func InitConnect() {
 	//	mgo.SetLogger(new(MongoLog))
 	////}
 	session = ses
-	log.Info("load mongo success", zap.String("conn", config.MONGO_ADDRESS))
+	log.Info("load mongo success", zap.String("conn", config.Host))
 }
 
 type MongoLog struct {
