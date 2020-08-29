@@ -7,8 +7,8 @@ package s_ws
 
 import (
 	"fmt"
+	"github.com/Shine-di/go-libary/log"
 	"github.com/gorilla/websocket"
-	"go-libary/log"
 	"go.uber.org/zap"
 	"net/http"
 	"net/url"

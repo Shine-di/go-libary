@@ -2,7 +2,7 @@ package mongo
 
 import (
 	"fmt"
-	"go-libary/log"
+	"github.com/Shine-di/go-libary/log"
 	"go.uber.org/zap"
 	"gopkg.in/mgo.v2"
 	"time"

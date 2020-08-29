@@ -9,7 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
-	"go-libary/log"
+	"github.com/Shine-di/go-libary/log"
 	"net/http"
 	"sync"
 )

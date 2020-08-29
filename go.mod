@@ -1,4 +1,4 @@
-module go-libary
+module github.com/Shine-di/go-libary
 
 go 1.13
 
