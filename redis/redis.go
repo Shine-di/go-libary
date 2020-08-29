@@ -11,7 +11,7 @@ import (
 )
 
 
-type RedisConfig struct {
+type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	User     string `json:"user"`
@@ -29,7 +29,7 @@ type Redis struct {
 	Client *redis.Client
 }
 
-func InitRedis(config RedisConfig) {
+func InitRedis(config *Config) {
 
 	client := redis.NewClient(&redis.Options{
 		Addr:        config.Host,

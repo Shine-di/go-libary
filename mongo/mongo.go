@@ -12,7 +12,7 @@ import (
 var session *mgo.Session
 
 
-type MongoConfig struct {
+type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	User     string `json:"user"`
@@ -35,7 +35,7 @@ func Conn() *mgo.Session {
 	return session
 }
 
-func InitConnect(config MongoConfig) {
+func InitConnect(config *Config) {
 	dialInfo := mgo.DialInfo{
 		Addrs:    []string{config.Host},
 		Timeout:  time.Second * 3,

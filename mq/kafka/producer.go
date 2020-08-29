@@ -3,6 +3,7 @@ package kafka
 import (
 	"context"
 	"errors"
+	"fmt"
 	"go-libary/log"
 
 	"github.com/Shopify/sarama"
@@ -13,12 +14,6 @@ const PusherMsgLength = 1000
 
 var producerCli sarama.AsyncProducer
 var pusherMsg = make(chan *sarama.ProducerMessage, PusherMsgLength)
-
-//fixme 地址
-var brokerList = []string{}
-
-// fixme topic
-var topics = []string{}
 
 func Push(ctx context.Context, key, topic string, msg string) error {
 	if producerCli == nil {
@@ -43,26 +38,20 @@ func Push(ctx context.Context, key, topic string, msg string) error {
 	return nil
 }
 
-func InitKafkaProducer() {
-	initProducer()
-	go pushDataToKafka()
-}
-
-func initProducer() (err error) {
+func InitProducer(config *Config) {
 	configPro := sarama.NewConfig()
 	configPro.Producer.Retry.Max = 5
 	configPro.Producer.RequiredAcks = sarama.WaitForAll
 	configPro.Producer.Return.Successes = true
 	configPro.Producer.Partitioner = sarama.NewManualPartitioner
-	producerCli, err = sarama.NewAsyncProducer(brokerList, configPro)
-
+	producer, err := sarama.NewAsyncProducer(config.Host, configPro)
 	if err != nil {
-		log.Fatal("init producer fail", zap.Error(err))
-		return err
+		panic(fmt.Sprintf("init producer fail %v", zap.Error(err)))
 	}
+	producerCli = producer
 	go callback()
-
-	return nil
+	go pushDataToKafka()
+	log.Info(fmt.Sprintf("load kafak producer success conn %v",config.Host ))
 }
 
 func pushDataToKafka() {

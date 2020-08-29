@@ -14,7 +14,13 @@ type Handler interface {
 	Do(topic string, msg []byte) error
 }
 
-func InitKafkaConsumer(serverName string) {
+type Config struct {
+	Host []string
+	Group string
+	Topics []string
+}
+
+func InitConsumer(config *Config) {
 	fmt.Println("init kafka consumer, it may take a few seconds...")
 
 	var err error
@@ -26,22 +32,17 @@ func InitKafkaConsumer(serverName string) {
 	clusterCfg.Consumer.MaxProcessingTime = time.Second * 3
 	clusterCfg.Group.Return.Notifications = true
 	clusterCfg.Consumer.Offsets.CommitInterval = time.Second
-	clusterCfg.ClientId = serverName
+	//clusterCfg.ClientId = config.Group
 
 	clusterCfg.Version = sarama.V0_10_2_1
 	if err = clusterCfg.Validate(); err != nil {
-		msg := fmt.Sprintf("Kafka consumer config invalidate. config: %v. err: %v", *clusterCfg, err)
-		fmt.Println(msg)
-		panic(msg)
+		panic(fmt.Sprintf("Kafka consumer config invalidate. config: %v. err: %v", *clusterCfg, err))
 	}
-
-	consumer, err = cluster.NewConsumer(brokerList, serverName, topics, clusterCfg)
+	consumer, err = cluster.NewConsumer(config.Host, config.Group, config.Topics, clusterCfg)
 	if err != nil {
-		msg := fmt.Sprintf("Create kafka consumer error: %v. config: %v", err, clusterCfg)
-		fmt.Println(msg)
-		log.Fatal(msg)
+		panic(fmt.Sprintf("Create kafka consumer error: %v. config: %v", err, clusterCfg))
 	}
-
+	log.Info(fmt.Sprintf("load kafak consumer success conn %v",config.Host ))
 }
 
 func Stop() {

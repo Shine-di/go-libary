@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-type DbConfig struct {
+type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	User     string `json:"user"`
@@ -36,7 +36,7 @@ func Conn() *gorm.DB {
 	conn.LogMode(true)
 	return conn
 }
-func InitConnect(config DbConfig) {
+func InitConnect(config *Config) {
 	if conn != nil {
 		return
 	}
