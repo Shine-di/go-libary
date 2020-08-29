@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"go-libary/log"
 	"go.uber.org/zap"
-	"time"
-
 	"gopkg.in/mgo.v2"
+	"time"
 )
 
 var session *mgo.Session

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/Shopify/sarama"
 	cluster "github.com/bsm/sarama-cluster"
-	"go-libary/log"
 	"time"
 )
 

@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go-libary/log"
-
 	"github.com/Shopify/sarama"
 	"go.uber.org/zap"
 )
