@@ -29,13 +29,15 @@ var (
 	Hour_23_30 = "0 30 23 * * ?"
 )
 
-func InitJobs(jobs []SJob) {
+func InitJobs(jobs []SJob,b bool  ) {
 	c := cron.New(
 		cron.WithSeconds(),
 		cron.WithChain(cron.Recover(cron.DefaultLogger)),
 	)
 	for _, e := range jobs {
-		go e.Run()
+		if b {
+			go e.Run()
+		}
 		EntryID, err := c.AddJob(e.GetSpec(), e)
 		if err != nil {
 			log.Info("添加定时任务失败")
