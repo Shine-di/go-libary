@@ -58,7 +58,8 @@ func(m *IntMap)SaveToRedis(){
 	for k := range m.Map {
 		result = append(result, k)
 	}
-	 if err := redis.GetRedis().SetValue(m.RedisKey,KEY,result,0);err != nil {
+	b,_ := json.Marshal(result)
+	 if err := redis.GetRedis().SetValue(m.RedisKey,KEY,string(b),0);err != nil {
 	 	log.Warn("数据保存redis失败",zap.Error(err))
 	 	return
 	 }
