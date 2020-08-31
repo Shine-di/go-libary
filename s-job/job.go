@@ -35,7 +35,7 @@ func InitJobs(jobs []SJob) {
 		cron.WithChain(cron.Recover(cron.DefaultLogger)),
 	)
 	for _, e := range jobs {
-		//go e.Run()
+		go e.Run()
 		EntryID, err := c.AddJob(e.GetSpec(), e)
 		if err != nil {
 			log.Info("添加定时任务失败")
