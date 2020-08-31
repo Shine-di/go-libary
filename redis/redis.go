@@ -3,6 +3,7 @@ package redis
 import (
 	"errors"
 	"fmt"
+	"github.com/Shine-di/go-libary/log"
 	"go.uber.org/zap"
 	"time"
 
