@@ -28,6 +28,7 @@ func (r *GET) Do() ([]byte, error) {
 		r.URL = l.String()
 	}
 	client := new(http.Client)
+	//client.Timeout = 10 * time.Second
 	if r.Proxy != "" {
 		u, _ := url.Parse(r.Proxy)
 		client.Transport = &http.Transport{

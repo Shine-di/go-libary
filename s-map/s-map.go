@@ -143,3 +143,18 @@ func (m *IntMaps) GetAllFromRedis() map[int64][]int64 {
 	}
 	return result
 }
+
+func (m *IntMaps) SYNC() {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	result := make(map[int64][]int64, 0)
+	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
+	if err != nil {
+		log.Warn("redis获取数据错误", zap.Error(err))
+		return
+	}
+	if err := json.Unmarshal([]byte(data), &result); err != nil {
+		log.Warn("redis获取解析数据错误", zap.Error(err))
+	}
+	m.Map = result
+}
