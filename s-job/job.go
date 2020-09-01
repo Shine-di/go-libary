@@ -27,9 +27,13 @@ var (
 	Hour_23    = "0 0 23 * * ?"
 	Hour_22    = "0 0 22 * * ?"
 	Hour_23_30 = "0 30 23 * * ?"
+	Hour_1_P   = "0 0 1 * * ?"
+	Hour_2_P   = "0 0 2 * * ?"
+	Hour_3_P   = "0 0 3 * * ?"
+	Hour_4_P   = "0 0 4 * * ?"
 )
 
-func InitJobs(jobs []SJob,b bool  ) {
+func InitJobs(jobs []SJob, b bool) {
 	c := cron.New(
 		cron.WithSeconds(),
 		cron.WithChain(cron.Recover(cron.DefaultLogger)),
