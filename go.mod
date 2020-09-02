@@ -8,6 +8,7 @@ require (
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gorilla/websocket v1.4.2
+	github.com/h2non/filetype v1.1.0 // indirect
 	github.com/jinzhu/gorm v1.9.16
 	github.com/onsi/ginkgo v1.14.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1
