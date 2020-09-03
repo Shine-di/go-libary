@@ -7,10 +7,15 @@ package oss
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"github.com/Shine-di/go-libary/log"
+	"github.com/Shine-di/go-libary/redis"
+	shttp "github.com/Shine-di/go-libary/s-http"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/h2non/filetype"
+	"time"
 )
 
 type Config struct {
@@ -36,6 +41,8 @@ type AliyunOss struct {
 	bucket     *oss.Bucket
 	BaseUrl    string
 	bucketName string
+	RedisKey   redis.PrefixEnum
+	RedisTime  time.Duration
 }
 
 func InitAliyunOss(config *Config) {
@@ -53,24 +60,60 @@ func InitAliyunOss(config *Config) {
 		bucket:     bucket,
 		BaseUrl:    config.BaseUrl,
 		bucketName: config.Bucket,
+		RedisKey:   "IMAGE",
+		RedisTime:  0,
 	}
 	log.Info("load aliyun oss success" + config.EndPoint)
 }
 
 func (a *AliyunOss) Upload(key string, data []byte) (string, error) {
-	r := bytes.NewReader(data)
-	filename := a.getName(key, data)
-	if err := a.bucket.PutObject(filename, r); err != nil {
-		return "", err
+	md5Obj := md5.New()
+	md5Obj.Write(data)
+	md5Value := hex.EncodeToString(md5Obj.Sum(nil))
+	imageUrl, err := redis.GetRedis().GetValue(a.RedisKey, md5Value)
+	if err != nil {
+		r := bytes.NewReader(data)
+		filename := a.GetName(key, data)
+		if err := a.bucket.PutObject(filename, r); err != nil {
+			return "", err
+		}
+		imageUrl := a.GetUrl(filename)
+		redis.GetRedis().SetValue(a.RedisKey, md5Value, imageUrl, a.RedisTime)
+		return imageUrl, nil
 	}
-	return a.GetUrl(filename), nil
+	return imageUrl, nil
+}
+
+func (a *AliyunOss) UploadByUrl(key string, url string) (string, error) {
+	imageUrl, err := redis.GetRedis().GetValue(a.RedisKey, url)
+	if err != nil {
+		get := shttp.GET{
+			URL:    url,
+			Header: nil,
+			Proxy:  "",
+			Token:  "",
+		}
+		data, err := get.Do()
+		if err != nil {
+			return "", err
+		}
+		r := bytes.NewReader(data)
+		filename := a.GetName(key, data)
+		if err := a.bucket.PutObject(filename, r); err != nil {
+			return "", err
+		}
+		imageUrl := a.GetUrl(filename)
+		redis.GetRedis().SetValue(a.RedisKey, url, imageUrl, a.RedisTime)
+		return imageUrl, nil
+	}
+	return imageUrl, nil
 }
 
 func (a *AliyunOss) GetUrl(filename string) string {
 	return fmt.Sprintf("http://%v.%v/%v", a.bucketName, a.BaseUrl, filename)
 }
 
-func (a *AliyunOss) getName(key string, data []byte) string {
+func (a *AliyunOss) GetName(key string, data []byte) string {
 	ext := ""
 	mime := ""
 	var fileType, err = filetype.Match(data)
