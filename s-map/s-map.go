@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"github.com/Shine-di/go-libary/log"
 	"github.com/Shine-di/go-libary/redis"
+	"github.com/Shine-di/go-libary/util"
 	"go.uber.org/zap"
 	"sync"
 )
@@ -59,7 +60,7 @@ func (m *IntMap) SaveToRedis() {
 	for k := range m.Map {
 		result = append(result, k)
 	}
-	b, _ := json.Marshal(result)
+	b, _ := json.Marshal(util.Deduplication(result))
 	if err := redis.GetRedis().SetValue(m.RedisKey, KEY, string(b), 0); err != nil {
 		log.Warn("数据保存redis失败", zap.Error(err))
 		return
@@ -118,7 +119,8 @@ func (m *IntMaps) SaveToRedis() {
 	defer m.lock.Unlock()
 	result := make(map[int64][]int64, 0)
 	for key, value := range m.Map {
-		result[key] = append(result[key], value...)
+		data := util.Deduplication(value)
+		result[key] = append(result[key], data...)
 	}
 	b, _ := json.Marshal(result)
 	if err := redis.GetRedis().SetValue(m.RedisKey, KEY, string(b), 0); err != nil {

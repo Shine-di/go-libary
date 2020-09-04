@@ -47,3 +47,15 @@ func GetStatus(beginAt, endAt string) int64 {
 	}
 	return 1
 }
+
+func Deduplication(data []int64) []int64 {
+	Map := make(map[int64]bool, 0)
+	for _, v := range data {
+		Map[v] = true
+	}
+	result := make([]int64, 0)
+	for k := range Map {
+		result = append(result, k)
+	}
+	return result
+}
