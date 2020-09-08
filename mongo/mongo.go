@@ -10,6 +10,9 @@ import (
 
 var session *mgo.Session
 
+var (
+	Nil = mgo.ErrNotFound
+)
 
 type Config struct {
 	Host     string `json:"host"`
@@ -20,9 +23,6 @@ type Config struct {
 	Open     int64  `json:"open"`
 	Idle     int64  `json:"idle"`
 }
-
-
-
 
 func Conn() *mgo.Session {
 	if session == nil {
