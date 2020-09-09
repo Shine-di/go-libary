@@ -6,7 +6,7 @@
 package token
 
 import (
-	gin_response "github.com/Shine-di/go-libary/gin-response"
+	gin_response "github.com/Shine-di/go-libary/response"
 	"github.com/gin-gonic/gin"
 )
 

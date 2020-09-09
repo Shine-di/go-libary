@@ -3,27 +3,52 @@
  * @date: 2020/8/10 6:50 下午
  */
 
-package gin_response
+package response
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type ApiResponse struct {
-	Code    int         `json:"code"`
-	Message string      `json:"msg"`
-	Total   int64       `json:"total"`
-	PerPage int64       `json:"per_page" form:"per_page"`
-	Result  interface{} `json:"data"`
+const (
+	RESULT = "result"
+	ERROR  = "error"
+)
+
+func ResultMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
+		result, ok := c.Get(RESULT)
+		if ok {
+			c.JSON(http.StatusOK, result)
+			return
+		}
+		err, ok := c.Get(ERROR)
+		if ok {
+			c.JSON(http.StatusOK, err)
+			return
+		}
+	}
 }
 
-func Success(c *gin.Context, total int64, perPage int, result interface{}) {
-	responseOutput(c, 1, "success", total, int64(perPage), result)
+func Success(total int64, perPage int, result interface{}) ApiResponse {
+	return ApiResponse{
+		Code:    1,
+		Message: "success",
+		Total:   total,
+		PerPage: int64(perPage),
+		Result:  result,
+	}
 }
 
-func Error(c *gin.Context, message string) {
-	responseOutput(c, 0, message, 0, 0, nil)
+func Error(message string) ApiResponse {
+	return ApiResponse{
+		Code:    0,
+		Message: message,
+		Total:   0,
+		PerPage: 0,
+		Result:  nil,
+	}
 }
 
 func responseOutput(c *gin.Context, code int, message string, total, perPage int64, result interface{}) {

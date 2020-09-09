@@ -35,6 +35,18 @@ func FindList(db Mdb, c MCollection, query interface{}, selector interface{}, so
 	return s.DB(db.parse()).C(c.parse()).Find(query).Sort(sort).Select(selector).Skip(offset).Limit(limit).All(result)
 }
 
+func FindListWithCount(db Mdb, c MCollection, query interface{}, selector interface{}, sort string, num int, result interface{}, offset, limit int) error {
+	s := session.Clone()
+	defer s.Close()
+	if err := s.DB(db.parse()).C(c.parse()).Find(query).Sort(sort).Select(selector).Skip(offset).Limit(limit).All(result); err != nil {
+		return err
+	}
+	num, err := s.DB(db.parse()).C(c.parse()).Find(query).Sort(sort).Select(selector).Count()
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func Update(db Mdb, c MCollection, selector interface{}, update interface{}) error {
 	s := session.Clone()
 	defer s.Close()
