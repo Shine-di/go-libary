@@ -28,6 +28,7 @@ func ResultMiddleware() gin.HandlerFunc {
 			c.JSON(http.StatusOK, err)
 			return
 		}
+
 	}
 }
 

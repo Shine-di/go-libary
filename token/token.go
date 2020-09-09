@@ -6,7 +6,7 @@
 package token
 
 import (
-	gin_response "github.com/Shine-di/go-libary/response"
+	"github.com/Shine-di/go-libary/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,18 +31,18 @@ func TokenMiddleware(game gameAuth) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.DefaultQuery("token", "")
 		if token == "" {
-			gin_response.Error(c, "token error")
+			c.Set(response.ERROR, response.Error("token error"))
 			c.Abort()
 			return
 		}
 		b, ok := tokenMap[token]
 		if !ok {
-			gin_response.Error(c, "token error")
+			c.Set(response.ERROR, response.Error("token error"))
 			c.Abort()
 			return
 		}
 		if !auth(game, b) {
-			gin_response.Error(c, "auth error")
+			c.Set(response.ERROR, response.Error("auth error"))
 			c.Abort()
 			return
 		}
