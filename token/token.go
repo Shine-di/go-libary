@@ -25,6 +25,7 @@ var (
 	tokenMap = map[string][]gameAuth{
 		USER_ONE: {
 			LOL,
+			DOTA,
 		},
 		TEST_USER_1: {
 			LOL,
