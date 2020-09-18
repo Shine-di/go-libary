@@ -2,9 +2,9 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/Shine-di/go-libary/log"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/Shine-di/go-libary/log"
 	"go.uber.org/zap"
 	"sync"
 )
@@ -33,7 +33,7 @@ func Conn() *gorm.DB {
 	if err := conn.DB().Ping(); err != nil {
 		panic(fmt.Sprintf("获取mysql连接 Ping出错 - [%s]", err.Error()))
 	}
-	conn.LogMode(true)
+	//conn.LogMode(true)
 	return conn
 }
 func InitConnect(config *Config) {
