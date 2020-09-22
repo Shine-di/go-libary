@@ -33,7 +33,7 @@ func InitRedis(config *Config) {
 
 	client := redis.NewClient(&redis.Options{
 		Addr:        config.Host,
-		Password:    config.Password,
+		Password:    "",
 		DB:          0,
 		DialTimeout: time.Second * 3,
 		PoolSize:    10,
