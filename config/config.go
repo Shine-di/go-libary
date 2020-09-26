@@ -78,13 +78,13 @@ func GetRedisConfig() *redis.Config {
 	}
 }
 
-func GetMySqlConfig() *mysql.Config {
+func GetMySqlConfig(database string) *mysql.Config {
 	return &mysql.Config{
 		Host:     MYSQL_HOST,
 		Port:     "",
 		User:     MYSQL_USER_NAME,
 		Password: MYSQL_PASSWORD,
-		Database: MYSQL_DATABASE,
+		Database: database,
 	}
 }
 
