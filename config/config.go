@@ -21,6 +21,7 @@ const (
 	HOST_LOCAL   = "47.112.121.179"
 
 	OSS_RELEASE = "oss-cn-shenzhen-internal.aliyuncs.com"
+	OSS_LOCAL   = "oss-cn-shenzhen.aliyuncs.com"
 
 	AccessKeyId     = "LTAI4G7891QXgoxYevdLyVEn"
 	AccessKeySecret = "e6mN4TAbzyYk6ZtqzmlZR9y8p8r6gJ"

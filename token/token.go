@@ -13,20 +13,11 @@ import (
 type gameAuth string
 
 const (
-<<<<<<< HEAD
-	LOL  gameAuth = "lol"
-	DOTA gameAuth = "dota2"
-	CSGO gameAuth = "csgo"
-	KOG  gameAuth = "kog"
-
-	USER_ONE = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
-=======
 	LOL      gameAuth = "lol"
 	DOTA     gameAuth = "dota2"
 	CSGO     gameAuth = "csgo"
 	KOG      gameAuth = "kog"
 	USER_ONE          = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
->>>>>>> fa3faa78d3a765c4f686a4d46bb1819543e7fcc0
 
 	TEST_USER_1 = "1iYjxTJHn7sN3eBqbmtzpklLaS65OVDvuR0UXrc8PFCMK"
 	TEST_USER_2 = "YKHphjw0TEoqzsxgQeA1C5MavDc4lOmt6duy29b7S8RLG"

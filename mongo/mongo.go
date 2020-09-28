@@ -48,11 +48,11 @@ func InitConnect(config *Config) {
 		panic(err.Error())
 	}
 	ses.SetSocketTimeout(time.Hour)
-	//
-	////if c.IsDevelop() {
-	//	mgo.SetDebug(true)
-	//	mgo.SetLogger(new(MongoLog))
-	////}
+
+	//if c.IsDevelop() {
+	//mgo.SetDebug(true)
+	//mgo.SetLogger(new(MongoLog))
+	//}
 	session = ses
 	log.Info("load mongo success", zap.String("conn", config.Host))
 }
