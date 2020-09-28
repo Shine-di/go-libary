@@ -15,6 +15,8 @@ type gameAuth string
 const (
 	LOL      gameAuth = "lol"
 	DOTA     gameAuth = "dota2"
+	CSGO     gameAuth = "csgo"
+	KOG      gameAuth = "kog"
 	USER_ONE          = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
 
 	TEST_USER_1 = "1iYjxTJHn7sN3eBqbmtzpklLaS65OVDvuR0UXrc8PFCMK"
