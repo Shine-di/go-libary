@@ -28,6 +28,8 @@ var (
 		USER_ONE: {
 			LOL,
 			DOTA,
+			CSGO,
+			KOG,
 		},
 		TEST_USER_1: {
 			LOL,
