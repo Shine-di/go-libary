@@ -7,6 +7,7 @@ package s_http
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -17,8 +18,11 @@ type POST struct {
 	URL    string
 	Header map[string]string
 	Params map[string]interface{}
-	Body   string
-	Proxy  string
+	// Content-Type 默认是json格式
+	Body string
+	// Content-Type application/x-www-form-urlencoded; charset=UTF-8
+	FormData map[string]interface{}
+	Proxy    string
 }
 
 var client = new(http.Client)
@@ -37,8 +41,33 @@ func (r *POST) Do() ([]byte, error) {
 		}
 		r.URL = r.URL + "?" + strings.Join(s, "&")
 	}
-	req, _ := http.NewRequest("POST", r.URL, strings.NewReader(r.Body))
-	req.Header.Set("Content-Type", "application/json")
+	var body io.Reader
+	// body 是json
+	if r.Body != "" {
+		body = strings.NewReader(r.Body)
+		if r.Header != nil {
+			r.Header["Content-Type"] = "application/json"
+		} else {
+			r.Header = map[string]string{
+				"Content-Type": "application/json",
+			}
+		}
+	}
+	if r.FormData != nil {
+		s := make([]string, 0)
+		for k, v := range r.Params {
+			s = append(s, fmt.Sprintf("%v=%v", k, v))
+		}
+		body = strings.NewReader(strings.Join(s, "&"))
+		if r.Header != nil {
+			r.Header["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+		} else {
+			r.Header = map[string]string{
+				"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+			}
+		}
+	}
+	req, _ := http.NewRequest("POST", r.URL, body)
 	for k, v := range r.Header {
 		req.Header.Add(k, v)
 	}
