@@ -5,7 +5,10 @@
 
 package util
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 const TimeFormat = "2006-01-02T15:04:05Z"
 
@@ -58,4 +61,21 @@ func Deduplication(data []int64) []int64 {
 		result = append(result, k)
 	}
 	return result
+}
+
+//替换特殊字符串
+func ReplaceSpecial(s string) string {
+	if strings.Contains(s, "\\") {
+		s = strings.ReplaceAll(s, "\\", "")
+	}
+	if strings.Contains(s, "\r") {
+		s = strings.ReplaceAll(s, "\r", "")
+	}
+	if strings.Contains(s, "\n") {
+		s = strings.ReplaceAll(s, "\n", "")
+	}
+	if strings.Contains(s, "\t") {
+		s = strings.ReplaceAll(s, "\t", "")
+	}
+	return s
 }
