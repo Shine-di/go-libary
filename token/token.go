@@ -13,18 +13,31 @@ import (
 type gameAuth string
 
 const (
-	LOL      gameAuth = "lol"
-	DOTA     gameAuth = "dota2"
-	CSGO     gameAuth = "csgo"
-	KOG      gameAuth = "kog"
-	USER_ONE          = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
-
-	TEST_USER_1 = "1iYjxTJHn7sN3eBqbmtzpklLaS65OVDvuR0UXrc8PFCMK"
-	TEST_USER_2 = "YKHphjw0TEoqzsxgQeA1C5MavDc4lOmt6duy29b7S8RLG"
+	LOL  gameAuth = "lol"
+	DOTA gameAuth = "dota2"
+	CSGO gameAuth = "csgo"
+	KOG  gameAuth = "kog"
+	// 自己测试用的token
+	TEST = "VRI5y04dNlUJDYaoKzgHfmEwbBtuhvX7FrMOk3QjxeZAW8cSspLTCnq"
+	// 商户 1
+	USER_ONE = "D67lL1AYF2j9bXMy80RNaTU43fIQpPOzxrmscKdG5SvoCBtEHhZnwgJ"
+	//USER_ONE = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
+	// 商户测试1
+	TEST_USER_1 = "TBoKrJFIkR87uxg6zawUADX1lH5tci9QS3fMjneWmEdZs2GNqOpL4P0"
+	//TEST_USER_1 = "1iYjxTJHn7sN3eBqbmtzpklLaS65OVDvuR0UXrc8PFCMK"
+	// 商户测试2
+	TEST_USER_2 = "krulfOFQIHEiMhGCYW21tTZ3XgjNBsUS4xezonwVAJPK8pLRdq7Dav0"
+	//TEST_USER_2 = "YKHphjw0TEoqzsxgQeA1C5MavDc4lOmt6duy29b7S8RLG"
 )
 
 var (
 	tokenMap = map[string][]gameAuth{
+		TEST: {
+			LOL,
+			DOTA,
+			CSGO,
+			KOG,
+		},
 		USER_ONE: {
 			LOL,
 			DOTA,
@@ -33,9 +46,15 @@ var (
 		},
 		TEST_USER_1: {
 			LOL,
+			DOTA,
+			CSGO,
+			KOG,
 		},
 		TEST_USER_2: {
 			LOL,
+			DOTA,
+			CSGO,
+			KOG,
 		},
 	}
 )
