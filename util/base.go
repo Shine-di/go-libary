@@ -77,5 +77,8 @@ func ReplaceSpecial(s string) string {
 	if strings.Contains(s, "\t") {
 		s = strings.ReplaceAll(s, "\t", "")
 	}
+	if strings.Contains(s, " ") {
+		s = strings.ReplaceAll(s, " ", "")
+	}
 	return s
 }
