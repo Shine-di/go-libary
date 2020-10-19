@@ -10,11 +10,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type GET struct {
 	URL    string
 	Header map[string]string
+	Params map[string]string
 	Proxy  string
 	Token  string
 }
@@ -28,12 +30,18 @@ func (r *GET) Do() ([]byte, error) {
 		r.URL = l.String()
 	}
 	client := new(http.Client)
-	//client.Timeout = 10 * time.Second
 	if r.Proxy != "" {
 		u, _ := url.Parse(r.Proxy)
 		client.Transport = &http.Transport{
 			Proxy: http.ProxyURL(u),
 		}
+	}
+	if r.Params != nil {
+		s := make([]string, 0)
+		for k, v := range r.Params {
+			s = append(s, fmt.Sprintf("%v=%v", k, v))
+		}
+		r.URL = r.URL + "?" + strings.Join(s, "&")
 	}
 	req, _ := http.NewRequest("GET", r.URL, nil)
 	for k, v := range r.Header {
