@@ -11,7 +11,7 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-var (
+const (
 	Second_5  = "*/5 * * * * ?"
 	Second_10 = "*/10 * * * * ?"
 	Second_30 = "*/30 * * * * ?"
