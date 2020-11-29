@@ -62,6 +62,17 @@ func Deduplication(data []int64) []int64 {
 	}
 	return result
 }
+func DeduplicationStr(data []string) []string {
+	Map := make(map[string]bool, 0)
+	for _, v := range data {
+		Map[v] = true
+	}
+	result := make([]string, 0)
+	for k := range Map {
+		result = append(result, k)
+	}
+	return result
+}
 
 //替换特殊字符串
 func ReplaceSpecial(s string) string {
