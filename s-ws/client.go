@@ -21,13 +21,14 @@ var (
 
 // stop chan 必须有缓存的
 type WS struct {
-	URL      string
-	Stop     chan bool
-	Message  chan []byte
-	Duration time.Duration
-	Header   http.Header
-	Con      *websocket.Conn
-	Proxy    string
+	URL              string
+	Stop             chan bool
+	Message          chan []byte
+	Duration         time.Duration
+	Header           http.Header
+	Con              *websocket.Conn
+	HeartbeatMessage string
+	Proxy            string
 }
 
 func (e *WS) Start() {
@@ -53,8 +54,12 @@ func (e *WS) Start() {
 	return
 }
 func (e *WS) Heartbeat(conn *websocket.Conn) {
+	m := "ping"
+	if e.HeartbeatMessage != "" {
+		m = e.HeartbeatMessage
+	}
 	for {
-		err := conn.WriteMessage(websocket.TextMessage, []byte(`ping`))
+		err := conn.WriteMessage(websocket.TextMessage, []byte(m))
 		log.Info("--心跳--", zap.Any("连接", e.URL))
 		if err != nil {
 			e.Stop <- true
