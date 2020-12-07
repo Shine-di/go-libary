@@ -17,6 +17,8 @@ const (
 	DOTA gameAuth = "dota2"
 	CSGO gameAuth = "csgo"
 	KOG  gameAuth = "kog"
+
+	RATE gameAuth = "rate"
 	// 自己测试用的token
 	TEST = "VRI5y04dNlUJDYaoKzgHfmEwbBtuhvX7FrMOk3QjxeZAW8cSspLTCnq"
 	// 商户 1
@@ -37,6 +39,7 @@ var (
 			DOTA,
 			CSGO,
 			KOG,
+			RATE,
 		},
 		USER_ONE: {
 			LOL,

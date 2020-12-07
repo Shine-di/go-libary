@@ -54,6 +54,10 @@ func (e *WS) Start() {
 	return
 }
 func (e *WS) Heartbeat(conn *websocket.Conn) {
+	if e.Duration == time.Duration(0) {
+		log.Info("不进行主动心跳")
+		return
+	}
 	m := "ping"
 	if e.HeartbeatMessage != "" {
 		m = e.HeartbeatMessage
