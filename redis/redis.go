@@ -10,13 +10,12 @@ import (
 	"github.com/go-redis/redis"
 )
 
-
 type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	User     string `json:"user"`
 	Password string `json:"password"`
-	Database string `json:"database"`
+	Database int    `json:"database"`
 }
 
 var redisc *Redis
@@ -34,7 +33,7 @@ func InitRedis(config *Config) {
 	client := redis.NewClient(&redis.Options{
 		Addr:        config.Host,
 		Password:    "",
-		DB:          0,
+		DB:          config.Database,
 		DialTimeout: time.Second * 3,
 		PoolSize:    10,
 	})

@@ -26,22 +26,27 @@ const (
 	AccessKeyId     = "LTAI4G7891QXgoxYevdLyVEn"
 	AccessKeySecret = "e6mN4TAbzyYk6ZtqzmlZR9y8p8r6gJ"
 	Bucket          = "ufinance"
-)
 
-var (
-	// redis
-	REDIS_ADDRESS  string
-	REDIS_PASSWORD = "Js123!@#"
-	// mysql
-	MYSQL_HOST      string
+	MONGO_USER     = "root"
+	MONGO_DATABASE = "admin"
+	MONGO_PASSWORD = "Js123!@#"
+
 	MYSQL_USER_NAME = "root"
 	MYSQL_PASSWORD  = "Js123!@#"
 	MYSQL_DATABASE  = "spark"
 
-	MONGO_ADDRESS  string
-	MONGO_USER     = "root"
-	MONGO_DATABASE = "admin"
-	MONGO_PASSWORD = "Js123!@#"
+	REDIS_PASSWORD = "Js123!@#"
+)
+
+var (
+	// redis
+	REDIS_ADDRESS string
+
+	// mysql
+	MYSQL_HOST string
+
+	MONGO_ADDRESS string
+
 	//oss
 	OSS_ADDRESS string
 )
@@ -68,13 +73,13 @@ func init() {
 	}
 }
 
-func GetRedisConfig() *redis.Config {
+func GetRedisConfig(database int) *redis.Config {
 	return &redis.Config{
 		Host:     REDIS_ADDRESS,
 		Port:     "",
 		User:     "",
 		Password: REDIS_PASSWORD,
-		Database: "",
+		Database: database,
 	}
 }
 
