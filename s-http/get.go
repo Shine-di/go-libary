@@ -14,11 +14,12 @@ import (
 )
 
 type GET struct {
-	URL    string
-	Header map[string]string
-	Params map[string]string
-	Proxy  string
-	Token  string
+	URL      string
+	Header   map[string]string
+	Params   map[string]string
+	UseProxy bool
+	Proxy    string
+	Token    string
 }
 
 func (r *GET) Do() ([]byte, error) {
@@ -30,6 +31,16 @@ func (r *GET) Do() ([]byte, error) {
 		r.URL = l.String()
 	}
 	client := new(http.Client)
+
+	if r.UseProxy && r.Proxy == "" {
+		proxyIp := getProxy()
+		if proxyIp != "" {
+			u, _ := url.Parse(proxyIp)
+			client.Transport = &http.Transport{
+				Proxy: http.ProxyURL(u),
+			}
+		}
+	}
 	if r.Proxy != "" {
 		u, _ := url.Parse(r.Proxy)
 		client.Transport = &http.Transport{
