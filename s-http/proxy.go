@@ -21,6 +21,9 @@ func InitProxy(ips []string) {
 }
 
 func getProxy() string {
+	if len(proxy) == 0 {
+		return ""
+	}
 	defer lock.Unlock()
 	lock.Lock()
 	k := index % len(proxy)
