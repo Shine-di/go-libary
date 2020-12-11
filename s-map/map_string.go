@@ -52,6 +52,21 @@ func (m *StrMap) Delete(key string) {
 func (m *StrMap) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+
+	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
+	if err != nil {
+		log.Warn("redis获取数据错误", zap.Error(err))
+	} else {
+		redisData := make([]string, 0)
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for _, e := range redisData {
+				m.Map[e] = true
+			}
+		}
+	}
+
 	result := make([]string, 0)
 	for k := range m.Map {
 		result = append(result, k)
@@ -67,15 +82,22 @@ func (m *StrMap) SaveToRedis() {
 func (m *StrMap) GetAllFromRedis() []string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make([]string, 0)
+	redisData := make([]string, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
-		return result
+	} else {
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for _, e := range redisData {
+				m.Map[e] = true
+			}
+		}
 	}
-
-	if err := json.Unmarshal([]byte(data), &result); err != nil {
-		log.Warn("redis获取解析数据错误", zap.Error(err))
+	result := make([]string, 0)
+	for e := range m.Map {
+		result = append(result, e)
 	}
 	return result
 }
@@ -130,6 +152,21 @@ func (m *StrMaps) Delete(key string) {
 func (m *StrMaps) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+
+	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
+	if err != nil {
+		log.Warn("redis获取数据错误", zap.Error(err))
+	} else {
+		redisData := make(map[string][]string, 0)
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for k, v := range redisData {
+				m.Map[k] = v
+			}
+		}
+	}
+
 	result := make(map[string][]string, 0)
 	for key, value := range m.Map {
 		data := util.DeduplicationStr(value)
@@ -146,15 +183,22 @@ func (m *StrMaps) SaveToRedis() {
 func (m *StrMaps) GetAllFromRedis() map[string][]string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make(map[string][]string, 0)
+	redisData := make(map[string][]string, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
-		return result
+	} else {
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for k, v := range redisData {
+				m.Map[k] = v
+			}
+		}
 	}
-
-	if err := json.Unmarshal([]byte(data), &result); err != nil {
-		log.Warn("redis获取解析数据错误", zap.Error(err))
+	result := make(map[string][]string, 0)
+	for k, v := range m.Map {
+		result[k] = v
 	}
 	return result
 }
@@ -170,6 +214,9 @@ func (m *StrMaps) SYNC() {
 	}
 	if err := json.Unmarshal([]byte(data), &result); err != nil {
 		log.Warn("redis获取解析数据错误", zap.Error(err))
+	} else {
+		for k, v := range result {
+			m.Map[k] = v
+		}
 	}
-	m.Map = result
 }

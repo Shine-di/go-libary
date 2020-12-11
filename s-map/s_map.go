@@ -27,7 +27,6 @@ type IntMap struct {
 func (m *IntMap) Set(key int64) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-
 	m.Map[key] = true
 }
 
@@ -53,9 +52,46 @@ func (m *IntMap) Delete(key int64) {
 	delete(m.Map, key)
 }
 
+func (m *IntMap) GetAllFromRedis() []int64 {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	redisData := make([]int64, 0)
+	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
+	if err != nil {
+		log.Warn("redis获取数据错误", zap.Error(err))
+	} else {
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for _, e := range redisData {
+				m.Map[e] = true
+			}
+		}
+	}
+	result := make([]int64, 0)
+	for k := range m.Map {
+		result = append(result, k)
+	}
+	return result
+}
+
 func (m *IntMap) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+	// 首先从redis中获取数据
+	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
+	if err != nil {
+		log.Warn("redis获取数据错误", zap.Error(err))
+	} else {
+		redisData := make([]int64, 0)
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for _, e := range redisData {
+				m.Map[e] = true
+			}
+		}
+	}
 	result := make([]int64, 0)
 	for k := range m.Map {
 		result = append(result, k)
@@ -68,36 +104,21 @@ func (m *IntMap) SaveToRedis() {
 	log.Info("数据保存redis成功")
 }
 
-func (m *IntMap) GetAllFromRedis() []int64 {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-	result := make([]int64, 0)
-	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
-	if err != nil {
-		log.Warn("redis获取数据错误", zap.Error(err))
-		return result
-	}
-
-	if err := json.Unmarshal([]byte(data), &result); err != nil {
-		log.Warn("redis获取解析数据错误", zap.Error(err))
-	}
-	return result
-}
-
 func (m *IntMap) SYNC() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make([]int64, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
 		return
 	}
+	result := make([]int64, 0)
 	if err := json.Unmarshal([]byte(data), &result); err != nil {
 		log.Warn("redis获取解析数据错误", zap.Error(err))
-	}
-	for _, e := range result {
-		m.Map[e] = true
+	} else {
+		for _, e := range result {
+			m.Map[e] = true
+		}
 	}
 }
 
@@ -134,6 +155,20 @@ func (m *IntMaps) Delete(key int64) {
 func (m *IntMaps) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+	// 首先从redis中获取数据
+	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
+	if err != nil {
+		log.Warn("redis获取数据错误", zap.Error(err))
+	} else {
+		redisData := make(map[int64][]int64, 0)
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for k, v := range redisData {
+				m.Map[k] = v
+			}
+		}
+	}
 	result := make(map[int64][]int64, 0)
 	for key, value := range m.Map {
 		data := util.Deduplication(value)
@@ -150,15 +185,22 @@ func (m *IntMaps) SaveToRedis() {
 func (m *IntMaps) GetAllFromRedis() map[int64][]int64 {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make(map[int64][]int64, 0)
+	redisData := make(map[int64][]int64, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
-		return result
+	} else {
+		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
+			log.Warn("redis获取解析数据错误", zap.Error(err))
+		} else {
+			for k, v := range redisData {
+				m.Map[k] = v
+			}
+		}
 	}
-
-	if err := json.Unmarshal([]byte(data), &result); err != nil {
-		log.Warn("redis获取解析数据错误", zap.Error(err))
+	result := make(map[int64][]int64, 0)
+	for k, v := range m.Map {
+		result[k] = v
 	}
 	return result
 }
@@ -166,14 +208,17 @@ func (m *IntMaps) GetAllFromRedis() map[int64][]int64 {
 func (m *IntMaps) SYNC() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make(map[int64][]int64, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
 		return
 	}
+	result := make(map[int64][]int64, 0)
 	if err := json.Unmarshal([]byte(data), &result); err != nil {
 		log.Warn("redis获取解析数据错误", zap.Error(err))
+	} else {
+		for k, v := range result {
+			m.Map[k] = v
+		}
 	}
-	m.Map = result
 }
