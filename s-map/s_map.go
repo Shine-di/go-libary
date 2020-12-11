@@ -78,20 +78,6 @@ func (m *IntMap) GetAllFromRedis() []int64 {
 func (m *IntMap) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	// 首先从redis中获取数据
-	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
-	if err != nil {
-		log.Warn("redis获取数据错误", zap.Error(err))
-	} else {
-		redisData := make([]int64, 0)
-		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
-			log.Warn("redis获取解析数据错误", zap.Error(err))
-		} else {
-			for _, e := range redisData {
-				m.Map[e] = true
-			}
-		}
-	}
 	result := make([]int64, 0)
 	for k := range m.Map {
 		result = append(result, k)
@@ -155,20 +141,6 @@ func (m *IntMaps) Delete(key int64) {
 func (m *IntMaps) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	// 首先从redis中获取数据
-	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
-	if err != nil {
-		log.Warn("redis获取数据错误", zap.Error(err))
-	} else {
-		redisData := make(map[int64][]int64, 0)
-		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
-			log.Warn("redis获取解析数据错误", zap.Error(err))
-		} else {
-			for k, v := range redisData {
-				m.Map[k] = v
-			}
-		}
-	}
 	result := make(map[int64][]int64, 0)
 	for key, value := range m.Map {
 		data := util.Deduplication(value)

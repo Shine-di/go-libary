@@ -52,21 +52,6 @@ func (m *StrMap) Delete(key string) {
 func (m *StrMap) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-
-	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
-	if err != nil {
-		log.Warn("redis获取数据错误", zap.Error(err))
-	} else {
-		redisData := make([]string, 0)
-		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
-			log.Warn("redis获取解析数据错误", zap.Error(err))
-		} else {
-			for _, e := range redisData {
-				m.Map[e] = true
-			}
-		}
-	}
-
 	result := make([]string, 0)
 	for k := range m.Map {
 		result = append(result, k)
@@ -152,20 +137,6 @@ func (m *StrMaps) Delete(key string) {
 func (m *StrMaps) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-
-	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
-	if err != nil {
-		log.Warn("redis获取数据错误", zap.Error(err))
-	} else {
-		redisData := make(map[string][]string, 0)
-		if err := json.Unmarshal([]byte(data), &redisData); err != nil {
-			log.Warn("redis获取解析数据错误", zap.Error(err))
-		} else {
-			for k, v := range redisData {
-				m.Map[k] = v
-			}
-		}
-	}
 
 	result := make(map[string][]string, 0)
 	for key, value := range m.Map {
