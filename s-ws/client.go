@@ -31,7 +31,7 @@ type WS struct {
 	Proxy            string
 }
 
-func (e *WS) Start() {
+func (e *WS) Start() error {
 	//e.Proxy = "http://8.210.99.228:59073"
 	dialer := new(websocket.Dialer)
 	if e.Proxy != "" {
@@ -44,14 +44,13 @@ func (e *WS) Start() {
 	conn, _, err := dialer.Dial(e.URL, e.Header)
 	if err != nil {
 		log.Warn("ws error", zap.Any("连接", e.URL), zap.Error(err))
-		e.Stop <- true
-		return
+		return err
 	}
 	log.Info("连接成功")
 	e.Con = conn
 	go e.Heartbeat(conn)
 	go e.ReadMessage(conn)
-	return
+	return nil
 }
 func (e *WS) Heartbeat(conn *websocket.Conn) {
 	if e.Duration == time.Duration(0) {
