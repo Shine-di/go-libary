@@ -44,6 +44,7 @@ func (e *WS) Start() error {
 	conn, _, err := dialer.Dial(e.URL, e.Header)
 	if err != nil {
 		log.Warn("ws error", zap.Any("连接", e.URL), zap.Error(err))
+		e.Stop <- true
 		return err
 	}
 	log.Info("连接成功")
