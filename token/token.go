@@ -30,6 +30,12 @@ const (
 	// 商户测试2
 	TEST_USER_2 = "krulfOFQIHEiMhGCYW21tTZ3XgjNBsUS4xezonwVAJPK8pLRdq7Dav0"
 	//TEST_USER_2 = "YKHphjw0TEoqzsxgQeA1C5MavDc4lOmt6duy29b7S8RLG"
+
+	N_TEST_USER_1 = "jdIHUN9v39xew5zSBue66Dv2vvJctxBoNGdJ2F0raK3qpUc9dC"
+	N_TEST_USER_2 = "HHFov9ZWuiJ7OiFgnlXBsRSOnKKd12ypbSGQDC4zZNThqwu48f"
+	N_TEST_USER_3 = "c1SzcAnRLwAaL6U6tgfazFdbszwbjxyyeBjC26PV3xmYHCC1hQ"
+	N_TEST_USER_4 = "0C2Y7jd7f1XT7IbiJ40VOOvBL9v428HBxDysskeZZA2JiV49N4"
+	N_TEST_USER_5 = "vRvKzJYUYNPwvpu2jrgbK5ngDJ7cj41Uk6IBnlxD8WM0tdjbCs"
 )
 
 var (
@@ -58,6 +64,22 @@ var (
 			DOTA,
 			CSGO,
 			KOG,
+		},
+
+		N_TEST_USER_1: {
+			RATE,
+		},
+		N_TEST_USER_2: {
+			RATE,
+		},
+		N_TEST_USER_3: {
+			RATE,
+		},
+		N_TEST_USER_4: {
+			RATE,
+		},
+		N_TEST_USER_5: {
+			RATE,
 		},
 	}
 )
