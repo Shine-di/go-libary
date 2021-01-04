@@ -14,6 +14,7 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/onsi/ginkgo v1.14.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/royeo/dingrobot v1.0.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	go.uber.org/zap v1.15.0
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
