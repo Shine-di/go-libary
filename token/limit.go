@@ -20,22 +20,22 @@ type Limit struct {
 	lock sync.Mutex
 }
 
-func (l *Limit) clean() {
+func (l *Limit) clean(t time.Duration) {
 	for {
 		log.Info("开始执行定时任务 - Clean")
 		l.lock.Lock()
 		l.m = make(map[string]int)
 		l.lock.Unlock()
-		<-time.After(time.Hour)
+		<-time.After(t)
 	}
 }
-func NewLimit(maxForHour int) *Limit {
+func NewLimit(max int, t time.Duration) *Limit {
 	l := &Limit{
-		Max:  maxForHour,
+		Max:  max,
 		m:    map[string]int{},
 		lock: sync.Mutex{},
 	}
-	go l.clean()
+	go l.clean(t)
 	return l
 }
 
