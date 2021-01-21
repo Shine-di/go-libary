@@ -47,40 +47,40 @@ var (
 			KOG,
 			RATE,
 		},
-		USER_ONE: {
-			LOL,
-			DOTA,
-			CSGO,
-			KOG,
-		},
-		TEST_USER_1: {
-			LOL,
-			DOTA,
-			CSGO,
-			KOG,
-		},
-		TEST_USER_2: {
-			LOL,
-			DOTA,
-			CSGO,
-			KOG,
-		},
-
-		N_TEST_USER_1: {
-			RATE,
-		},
-		N_TEST_USER_2: {
-			RATE,
-		},
-		N_TEST_USER_3: {
-			RATE,
-		},
-		N_TEST_USER_4: {
-			RATE,
-		},
-		N_TEST_USER_5: {
-			RATE,
-		},
+		//USER_ONE: {
+		//	//LOL,
+		//	//DOTA,
+		//	//CSGO,
+		//	//KOG,
+		//},
+		//TEST_USER_1: {
+		//	//LOL,
+		//	//DOTA,
+		//	//CSGO,
+		//	//KOG,
+		//},
+		//TEST_USER_2: {
+		//	//LOL,
+		//	//DOTA,
+		//	//CSGO,
+		//	//KOG,
+		//},
+		//
+		//N_TEST_USER_1: {
+		//	//RATE,
+		//},
+		//N_TEST_USER_2: {
+		//	//RATE,
+		//},
+		//N_TEST_USER_3: {
+		//	//RATE,
+		//},
+		//N_TEST_USER_4: {
+		//	//RATE,
+		//},
+		//N_TEST_USER_5: {
+		//	//RATE,
+		//},
 	}
 )
 
