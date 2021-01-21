@@ -20,7 +20,7 @@ const (
 
 	RATE gameAuth = "rate"
 	// 自己测试用的token
-	TEST = "VRI5y04dNlUJDYaoKzgHfmEwbBtuhvX7FrMOk3QjxeZAW8cSspLTCnq"
+	TEST = "G5WaoTMYDuINAMVIQVmjANVhzCgDVT4AxPL9fAmMmSRCP6N8gE"
 	// 商户 1
 	USER_ONE = "D67lL1AYF2j9bXMy80RNaTU43fIQpPOzxrmscKdG5SvoCBtEHhZnwgJ"
 	//USER_ONE = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
