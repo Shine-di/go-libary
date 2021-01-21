@@ -36,6 +36,9 @@ const (
 	N_TEST_USER_3 = "c1SzcAnRLwAaL6U6tgfazFdbszwbjxyyeBjC26PV3xmYHCC1hQ"
 	N_TEST_USER_4 = "0C2Y7jd7f1XT7IbiJ40VOOvBL9v428HBxDysskeZZA2JiV49N4"
 	N_TEST_USER_5 = "vRvKzJYUYNPwvpu2jrgbK5ngDJ7cj41Uk6IBnlxD8WM0tdjbCs"
+
+	// 正式的商户1 海南
+	N_TEST_USER_6 = "2e5Xp9V2vuSMY7sfNR9QiwmIO8xxjCNqnJJzSSCzJd1kCaKSzn"
 )
 
 var (
@@ -78,9 +81,9 @@ var (
 		//N_TEST_USER_4: {
 		//	//RATE,
 		//},
-		//N_TEST_USER_5: {
-		//	//RATE,
-		//},
+		N_TEST_USER_6: {
+			RATE,
+		},
 	}
 )
 
