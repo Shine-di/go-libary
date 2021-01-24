@@ -3,13 +3,13 @@
  * @date: 2020/8/7 5:47 下午
  */
 
-package s_ws
+package ws
 
 import (
 	"errors"
 	"fmt"
+	"github.com/dishine/libary/log"
 	"github.com/gorilla/websocket"
-	"github.com/Shine-di/go-libary/log"
 	"net/http"
 	"sync"
 )

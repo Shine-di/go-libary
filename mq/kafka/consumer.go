@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Shopify/sarama"
 	cluster "github.com/bsm/sarama-cluster"
+	"github.com/dishine/libary/log"
 	"time"
 )
 
@@ -14,8 +15,8 @@ type Handler interface {
 }
 
 type Config struct {
-	Host []string
-	Group string
+	Host   []string
+	Group  string
 	Topics []string
 }
 
@@ -41,7 +42,7 @@ func InitConsumer(config *Config) {
 	if err != nil {
 		panic(fmt.Sprintf("Create kafka consumer error: %v. config: %v", err, clusterCfg))
 	}
-	log.Info(fmt.Sprintf("load kafak consumer success conn %v",config.Host ))
+	log.Info(fmt.Sprintf("load kafak consumer success conn %v", config.Host))
 }
 
 func Stop() {

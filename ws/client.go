@@ -3,11 +3,11 @@
  * @date: 2020/7/25 5:03 下午
  */
 
-package s_ws
+package ws
 
 import (
 	"fmt"
-	"github.com/Shine-di/go-libary/log"
+	"github.com/dishine/libary/log"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"

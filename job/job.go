@@ -3,11 +3,11 @@
  * @date: 2020/8/29 1:10 下午
  */
 
-package s_job
+package job
 
 import (
 	"fmt"
-	"github.com/Shine-di/go-libary/log"
+	"github.com/dishine/libary/log"
 	"github.com/robfig/cron/v3"
 )
 

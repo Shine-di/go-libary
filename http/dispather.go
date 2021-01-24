@@ -3,21 +3,19 @@
  * @date: 2020/8/29 4:36 下午
  */
 
-package s_http
+package http
 
 // Job represents the job to be run
-
 
 type Job struct {
 	Payload func()
 }
 
-
 // Worker represents the worker that executes the job
 type Worker struct {
-	WorkerPool  chan chan Job
-	JobChannel  chan Job
-	quit    	chan bool
+	WorkerPool chan chan Job
+	JobChannel chan Job
+	quit       chan bool
 }
 
 func NewWorker(workerPool chan chan Job) Worker {
@@ -56,18 +54,14 @@ func (w Worker) Stop() {
 	}()
 }
 
-
-
-
-
 type Dispatcher struct {
 	maxWorkers int
 	// A pool of workers channels that are registered with the dispatcher
 	WorkerPool chan chan Job
-	JobQueue chan Job
+	JobQueue   chan Job
 }
 
-func NewDispatcher(maxWorkers int,job chan Job) *Dispatcher {
+func NewDispatcher(maxWorkers int, job chan Job) *Dispatcher {
 	pool := make(chan chan Job, maxWorkers)
 	return &Dispatcher{
 		maxWorkers: maxWorkers,

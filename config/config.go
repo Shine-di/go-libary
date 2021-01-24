@@ -6,10 +6,10 @@
 package config
 
 import (
-	"github.com/Shine-di/go-libary/mongo"
-	"github.com/Shine-di/go-libary/mysql"
-	"github.com/Shine-di/go-libary/oss"
-	"github.com/Shine-di/go-libary/redis"
+	"github.com/dishine/libary/mongo"
+	"github.com/dishine/libary/mysql"
+	"github.com/dishine/libary/oss"
+	"github.com/dishine/libary/redis"
 	"os"
 )
 

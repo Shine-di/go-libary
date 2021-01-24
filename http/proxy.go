@@ -3,7 +3,7 @@
  * @date: 2020/12/8 下午6:07
  */
 
-package s_http
+package http
 
 import "sync"
 

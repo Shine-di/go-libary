@@ -1,61 +1,73 @@
 /**
  * @author: D-S
- * @date: 2020/8/25 11:13 下午
+ * @date: 2020/11/29 下午9:39
  */
 
-package s_map
+package _map
 
 import (
 	"encoding/json"
-	"github.com/Shine-di/go-libary/log"
-	"github.com/Shine-di/go-libary/redis"
-	"github.com/Shine-di/go-libary/util"
+	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/redis"
+	"github.com/dishine/libary/util"
 	"go.uber.org/zap"
 	"sync"
 )
 
-const (
-	KEY = "ENUM"
-)
-
-type IntMap struct {
-	Map      map[int64]bool
+type StrMap struct {
+	Map      map[string]bool
 	lock     sync.RWMutex
 	RedisKey redis.PrefixEnum
 }
 
-func (m *IntMap) Set(key int64) {
+func (m *StrMap) Set(key string) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+
 	m.Map[key] = true
 }
 
-func (m *IntMap) Get(key int64) bool {
+func (m *StrMap) Get(key string) bool {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	return m.Map[key]
 }
 
-func (m *IntMap) GetAll() []int64 {
+func (m *StrMap) GetAll() []string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make([]int64, 0)
+	result := make([]string, 0)
 	for k := range m.Map {
 		result = append(result, k)
 	}
 	return result
 }
 
-func (m *IntMap) Delete(key int64) {
+func (m *StrMap) Delete(key string) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	delete(m.Map, key)
 }
 
-func (m *IntMap) GetAllFromRedis() []int64 {
+func (m *StrMap) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	redisData := make([]int64, 0)
+	result := make([]string, 0)
+	for k := range m.Map {
+		result = append(result, k)
+	}
+	b, _ := json.Marshal(util.DeduplicationStr(result))
+	if err := redis.GetRedis().SetValue(m.RedisKey, KEY, string(b), 0); err != nil {
+		log.Warn("数据保存redis失败", zap.Error(err))
+		return
+	}
+	log.Info("数据保存redis成功")
+}
+
+func (m *StrMap) GetAllFromRedis() []string {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	redisData := make([]string, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
@@ -68,82 +80,67 @@ func (m *IntMap) GetAllFromRedis() []int64 {
 			}
 		}
 	}
-	result := make([]int64, 0)
-	for k := range m.Map {
-		result = append(result, k)
+	result := make([]string, 0)
+	for e := range m.Map {
+		result = append(result, e)
 	}
 	return result
 }
 
-func (m *IntMap) SaveToRedis() {
+func (m *StrMap) SYNC() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make([]int64, 0)
-	for k := range m.Map {
-		result = append(result, k)
-	}
-	b, _ := json.Marshal(util.Deduplication(result))
-	if err := redis.GetRedis().SetValue(m.RedisKey, KEY, string(b), 0); err != nil {
-		log.Warn("数据保存redis失败", zap.Error(err))
-		return
-	}
-	log.Info("数据保存redis成功")
-}
-
-func (m *IntMap) SYNC() {
-	m.lock.Lock()
-	defer m.lock.Unlock()
+	result := make([]string, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
 		return
 	}
-	result := make([]int64, 0)
 	if err := json.Unmarshal([]byte(data), &result); err != nil {
 		log.Warn("redis获取解析数据错误", zap.Error(err))
-	} else {
-		for _, e := range result {
-			m.Map[e] = true
-		}
+	}
+	for _, e := range result {
+		m.Map[e] = true
 	}
 }
 
-type IntMaps struct {
-	Map      map[int64][]int64
+type StrMaps struct {
+	Map      map[string][]string
 	lock     sync.RWMutex
 	RedisKey redis.PrefixEnum
 }
 
-func (m *IntMaps) SetOne(key, value int64) {
+func (m *StrMaps) SetOne(key, value string) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	m.Map[key] = append(m.Map[key], value)
 }
 
-func (m *IntMaps) GetOne(key int64) []int64 {
+func (m *StrMaps) GetOne(key string) []string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	return m.Map[key]
 }
 
-func (m *IntMaps) GetAll() map[int64][]int64 {
+func (m *StrMaps) GetAll() map[string][]string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	return m.Map
 }
 
-func (m *IntMaps) Delete(key int64) {
+func (m *StrMaps) Delete(key string) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	delete(m.Map, key)
 }
 
-func (m *IntMaps) SaveToRedis() {
+func (m *StrMaps) SaveToRedis() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	result := make(map[int64][]int64, 0)
+
+	result := make(map[string][]string, 0)
 	for key, value := range m.Map {
-		data := util.Deduplication(value)
+		data := util.DeduplicationStr(value)
 		result[key] = append(result[key], data...)
 	}
 	b, _ := json.Marshal(result)
@@ -154,10 +151,10 @@ func (m *IntMaps) SaveToRedis() {
 	log.Info("数据保存redis成功")
 }
 
-func (m *IntMaps) GetAllFromRedis() map[int64][]int64 {
+func (m *StrMaps) GetAllFromRedis() map[string][]string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	redisData := make(map[int64][]int64, 0)
+	redisData := make(map[string][]string, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
@@ -170,22 +167,22 @@ func (m *IntMaps) GetAllFromRedis() map[int64][]int64 {
 			}
 		}
 	}
-	result := make(map[int64][]int64, 0)
+	result := make(map[string][]string, 0)
 	for k, v := range m.Map {
 		result[k] = v
 	}
 	return result
 }
 
-func (m *IntMaps) SYNC() {
+func (m *StrMaps) SYNC() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+	result := make(map[string][]string, 0)
 	data, err := redis.GetRedis().GetValue(m.RedisKey, KEY)
 	if err != nil {
 		log.Warn("redis获取数据错误", zap.Error(err))
 		return
 	}
-	result := make(map[int64][]int64, 0)
 	if err := json.Unmarshal([]byte(data), &result); err != nil {
 		log.Warn("redis获取解析数据错误", zap.Error(err))
 	} else {

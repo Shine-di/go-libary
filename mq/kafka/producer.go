@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Shopify/sarama"
+	"github.com/dishine/libary/log"
 	"go.uber.org/zap"
 )
 
@@ -49,7 +50,7 @@ func InitProducer(config *Config) {
 	producerCli = producer
 	go callback()
 	go pushDataToKafka()
-	log.Info(fmt.Sprintf("load kafak producer success conn %v",config.Host ))
+	log.Info(fmt.Sprintf("load kafak producer success conn %v", config.Host))
 }
 
 func pushDataToKafka() {

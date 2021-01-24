@@ -7,8 +7,8 @@ package token
 
 import (
 	"fmt"
-	"github.com/Shine-di/go-libary/log"
-	"github.com/Shine-di/go-libary/response"
+	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/response"
 	"github.com/gin-gonic/gin"
 	"sync"
 	"time"

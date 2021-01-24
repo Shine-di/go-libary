@@ -10,10 +10,10 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"github.com/Shine-di/go-libary/log"
-	"github.com/Shine-di/go-libary/redis"
-	shttp "github.com/Shine-di/go-libary/s-http"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/dishine/libary/http"
+	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/redis"
 	"github.com/h2non/filetype"
 	"time"
 )
@@ -87,7 +87,7 @@ func (a *AliyunOss) Upload(key string, data []byte) (string, error) {
 func (a *AliyunOss) UploadByUrl(key string, url string) (string, error) {
 	imageUrl, err := redis.GetRedis().GetValue(a.RedisKey, url)
 	if err != nil {
-		get := shttp.GET{
+		get := http.GET{
 			URL:    url,
 			Header: nil,
 			Proxy:  "",

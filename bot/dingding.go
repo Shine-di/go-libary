@@ -10,7 +10,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"github.com/Shine-di/go-libary/log"
+	"github.com/dishine/libary/log"
 	"github.com/royeo/dingrobot"
 	"go.uber.org/zap"
 	"net/url"

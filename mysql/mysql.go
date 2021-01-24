@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/Shine-di/go-libary/log"
+	"github.com/dishine/libary/log"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go.uber.org/zap"
