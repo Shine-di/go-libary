@@ -33,7 +33,6 @@ func Conn() *gorm.DB {
 	if err := conn.DB().Ping(); err != nil {
 		panic(fmt.Sprintf("获取mysql连接 Ping出错 - [%s]", err.Error()))
 	}
-	//conn.LogMode(true)
 	return conn
 }
 func InitConnect(config *Config) {
@@ -56,3 +55,5 @@ func InitConnect(config *Config) {
 		panic(fmt.Sprintf("连接mysql Ping出错 - [%s]", err.Error()))
 	}
 }
+
+// 从yaml 中获取 配置内容
