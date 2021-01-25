@@ -22,8 +22,9 @@ type Yaml struct {
 }
 
 // 环境加后缀
-func ParseConfig(name string) *Yaml {
-	if name != "" {
+func ParseConfig() *Yaml {
+	name := ""
+	if IsLocal() {
 		name = "config/" + GetEnv() + "-" + name + ".yaml"
 	} else {
 		name = "config/" + GetEnv() + ".yaml"
@@ -78,6 +79,20 @@ func SetEnv(env string) {
 }
 func GetEnv() string {
 	return os.Getenv("ENVIRON")
+}
+
+func SetLocation(location string) {
+	_ = os.Setenv("LOCATION", location)
+}
+func GetLocation() string {
+	return os.Getenv("LOCATION")
+}
+
+func IsLocal() bool {
+	if GetLocation() == "local" {
+		return true
+	}
+	return false
 }
 
 func init() {
