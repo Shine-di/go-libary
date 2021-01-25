@@ -30,7 +30,7 @@ func ParseConfig(name string) *Yaml {
 	}
 	config := new(Yaml)
 	if err := util.ParseYaml(name, config); err != nil {
-		panic(fmt.Sprintf("解析配置文件错误%v", err.Error()))
+		panic(fmt.Sprintf("解析配置文件错误: %v", err.Error()))
 	}
 	return config
 }
