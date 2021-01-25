@@ -3,6 +3,8 @@ package mongo
 import (
 	"fmt"
 	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/node"
+	"github.com/dishine/libary/util"
 	"go.uber.org/zap"
 	"gopkg.in/mgo.v2"
 	"time"
@@ -22,6 +24,43 @@ type Config struct {
 	Database string `json:"database"`
 	Open     int64  `json:"open"`
 	Idle     int64  `json:"idle"`
+}
+
+type Load struct {
+	YamlFileAddr string
+}
+
+func (m *Load) GetOrder() node.Order {
+	return node.Before
+}
+func (m *Load) GetOptionFunc() node.OptionFunc {
+	return m.Connect
+}
+func (m *Load) Connect() error {
+	config := new(Config)
+	if err := util.ParseYaml(m.YamlFileAddr, config); err != nil {
+		return err
+	}
+	dialInfo := mgo.DialInfo{
+		Addrs:    []string{config.Host},
+		Timeout:  time.Second * 3,
+		Database: config.Database,
+		Username: config.User,
+		Password: config.Password,
+	}
+	ses, err := mgo.DialWithInfo(&dialInfo)
+	if err != nil {
+		log.Info("mongo 连接错误")
+		panic(err.Error())
+	}
+	ses.SetSocketTimeout(time.Hour)
+	//if c.IsDevelop() {
+	//mgo.SetDebug(true)
+	//mgo.SetLogger(new(MongoLog))
+	//}
+	session = ses
+	log.Info("load mongo success", zap.String("conn", config.Host))
+	return nil
 }
 
 func Conn() *mgo.Session {

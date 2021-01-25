@@ -3,6 +3,8 @@ package mysql
 import (
 	"fmt"
 	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/node"
+	"github.com/dishine/libary/util"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go.uber.org/zap"
@@ -10,13 +12,13 @@ import (
 )
 
 type Config struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Database string `json:"database"`
-	Open     int64  `json:"open"`
-	Idle     int64  `json:"idle"`
+	Host     string `json:"host" yaml:"host"`
+	Port     string `json:"port" yaml:"port"`
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
+	Database string `json:"database" yaml:"database"`
+	Open     int64  `json:"open" yaml:"open"`
+	Idle     int64  `json:"idle" yaml:"idle"`
 }
 
 var (
@@ -56,4 +58,36 @@ func InitConnect(config *Config) {
 	}
 }
 
+type Load struct {
+	YamlFileAddr string
+}
+
+func (m *Load) GetOrder() node.Order {
+	return node.Before
+}
+func (m *Load) GetOptionFunc() node.OptionFunc {
+	return m.Connect
+}
+
 // 从yaml 中获取 配置内容
+func (m *Load) Connect() error {
+	config := new(Config)
+	if err := util.ParseYaml(m.YamlFileAddr, config); err != nil {
+		return err
+	}
+	host := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True", config.User, config.Password, config.Host, config.Database)
+	if db, err := gorm.Open("mysql", host); err != nil {
+		panic(fmt.Sprintf("连接mysql出错 - [%s]", err.Error()))
+		return err
+	} else {
+		log.Info("load mysql success", zap.String("conn", host))
+		db.DB().SetMaxIdleConns(5)
+		db.DB().SetMaxOpenConns(20)
+		db.SingularTable(true)
+		conn = db
+	}
+	if err := conn.DB().Ping(); err != nil {
+		return err
+	}
+	return nil
+}

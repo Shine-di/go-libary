@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/node"
+	"github.com/dishine/libary/util"
 	"go.uber.org/zap"
 	"time"
 
@@ -16,6 +18,40 @@ type Config struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Database int    `json:"database"`
+}
+
+type Load struct {
+	YamlFileAddr string
+}
+
+func (m *Load) GetOrder() node.Order {
+	return node.Before
+}
+func (m *Load) GetOptionFunc() node.OptionFunc {
+	return m.Connect
+}
+func (m *Load) Connect() error {
+	config := new(Config)
+	if err := util.ParseYaml(m.YamlFileAddr, config); err != nil {
+		return err
+	}
+	client := redis.NewClient(&redis.Options{
+		Addr:        config.Host,
+		Password:    config.Password,
+		DB:          config.Database,
+		DialTimeout: time.Second * 3,
+		PoolSize:    10,
+	})
+
+	redisc = &Redis{
+		Client: client,
+	}
+
+	if err := client.Ping().Err(); err != nil {
+		return err
+	}
+	log.Info("load redis success", zap.String("conn", config.Host))
+	return nil
 }
 
 var redisc *Redis

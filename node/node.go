@@ -17,7 +17,7 @@ import (
 type Order string
 
 // 需要执行的 func
-type OptionFunc func()
+type OptionFunc func() error
 
 const (
 	Before Order = "before"
@@ -65,13 +65,17 @@ func (n *Node) Start() error {
 	// 执行之前任务
 	if len(n.beforeFunc) > 0 {
 		for _, f := range n.beforeFunc {
-			f()
+			if err := f(); err != nil {
+				return err
+			}
 		}
 	}
 	// 执行之后的任务
 	if len(n.afterFunc) > 0 {
 		for _, f := range n.afterFunc {
-			f()
+			if err := f(); err != nil {
+				return err
+			}
 		}
 	}
 	// 执行定时任务
