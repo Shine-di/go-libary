@@ -52,7 +52,7 @@ func (m *Load) Connect() error {
 	if err := client.Ping().Err(); err != nil {
 		return err
 	}
-	log.Info("load redis success", zap.String("conn", config.Host))
+	log.Info("load redis success", zap.String("conn", config.Host+":"+config.Port))
 	return nil
 }
 

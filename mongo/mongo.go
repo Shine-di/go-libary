@@ -62,7 +62,7 @@ func (m *Load) Connect() error {
 	//mgo.SetLogger(new(MongoLog))
 	//}
 	session = ses
-	log.Info("load mongo success", zap.String("conn", config.Host))
+	log.Info("load mongo success", zap.String("conn", config.Host+":"+config.Port))
 	return nil
 }
 
