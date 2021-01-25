@@ -68,3 +68,9 @@ type SJob interface {
 	GetSpec() string
 	cron.Job
 }
+
+type Job interface {
+	GetSpec() string
+	DoFirst() bool
+	cron.Job
+}

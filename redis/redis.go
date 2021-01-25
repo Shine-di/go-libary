@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dishine/libary/log"
+	"github.com/dishine/libary/node"
 	"go.uber.org/zap"
 	"time"
 
@@ -11,11 +12,48 @@ import (
 )
 
 type Config struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Database int    `json:"database"`
+	Host     string `json:"host" yaml:"host"`
+	Port     string `json:"port" yaml:"port"`
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
+	Database int    `json:"database" yaml:"database"`
+}
+
+func NewLoad(config *Config) *Load {
+	return &Load{
+		config: config,
+	}
+}
+
+type Load struct {
+	config *Config
+}
+
+func (m *Load) GetOrder() node.Order {
+	return node.Before
+}
+func (m *Load) GetOptionFunc() node.Func {
+	return m.Connect
+}
+func (m *Load) Connect() error {
+	config := m.config
+	client := redis.NewClient(&redis.Options{
+		Addr:        config.Host + ":" + config.Port,
+		Password:    config.Password,
+		DB:          config.Database,
+		DialTimeout: time.Second * 3,
+		PoolSize:    10,
+	})
+
+	redisc = &Redis{
+		Client: client,
+	}
+
+	if err := client.Ping().Err(); err != nil {
+		return err
+	}
+	log.Info("load redis success", zap.String("conn", config.Host+":"+config.Port))
+	return nil
 }
 
 var redisc *Redis
