@@ -4,3 +4,8 @@
  */
 
 package node
+
+type Option interface {
+	GetOrder() Order
+	GetOptionFunc() OptionFunc
+}
