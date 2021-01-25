@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/dishine/libary/log"
 	"github.com/dishine/libary/node"
-	"github.com/dishine/libary/util"
 	"go.uber.org/zap"
 	"gopkg.in/mgo.v2"
 	"time"
@@ -17,32 +16,36 @@ var (
 )
 
 type Config struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Database string `json:"database"`
-	Open     int64  `json:"open"`
-	Idle     int64  `json:"idle"`
+	Host     string `json:"host" yaml:"host"`
+	Port     string `json:"port" yaml:"port"`
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
+	Database string `json:"database" yaml:"database"`
+	Open     int64  `json:"open" yaml:"open"`
+	Idle     int64  `json:"idle" yaml:"idle"`
+}
+
+func NewLoad(config *Config) *Load {
+	return &Load{
+		config: config,
+	}
 }
 
 type Load struct {
-	YamlFileAddr string
+	config *Config
 }
 
 func (m *Load) GetOrder() node.Order {
 	return node.Before
 }
-func (m *Load) GetOptionFunc() node.OptionFunc {
+func (m *Load) GetOptionFunc() node.Func {
 	return m.Connect
 }
+
 func (m *Load) Connect() error {
-	config := new(Config)
-	if err := util.ParseYaml(m.YamlFileAddr, config); err != nil {
-		return err
-	}
+	config := m.config
 	dialInfo := mgo.DialInfo{
-		Addrs:    []string{config.Host},
+		Addrs:    []string{config.Host + ":" + config.Port},
 		Timeout:  time.Second * 3,
 		Database: config.Database,
 		Username: config.User,

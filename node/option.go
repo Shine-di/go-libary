@@ -5,7 +5,14 @@
 
 package node
 
-type Option interface {
+import "github.com/dishine/libary/job"
+
+type OptionFunc interface {
 	GetOrder() Order
-	GetOptionFunc() OptionFunc
+	GetOptionFunc() Func
+}
+
+type Options struct {
+	Jobs    []job.Job // 定时任务
+	Options []OptionFunc
 }

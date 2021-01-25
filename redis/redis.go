@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/dishine/libary/log"
 	"github.com/dishine/libary/node"
-	"github.com/dishine/libary/util"
 	"go.uber.org/zap"
 	"time"
 
@@ -13,30 +12,33 @@ import (
 )
 
 type Config struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Database int    `json:"database"`
+	Host     string `json:"host" yaml:"host"`
+	Port     string `json:"port" yaml:"port"`
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
+	Database int    `json:"database" yaml:"database"`
+}
+
+func NewLoad(config *Config) *Load {
+	return &Load{
+		config: config,
+	}
 }
 
 type Load struct {
-	YamlFileAddr string
+	config *Config
 }
 
 func (m *Load) GetOrder() node.Order {
 	return node.Before
 }
-func (m *Load) GetOptionFunc() node.OptionFunc {
+func (m *Load) GetOptionFunc() node.Func {
 	return m.Connect
 }
 func (m *Load) Connect() error {
-	config := new(Config)
-	if err := util.ParseYaml(m.YamlFileAddr, config); err != nil {
-		return err
-	}
+	config := m.config
 	client := redis.NewClient(&redis.Options{
-		Addr:        config.Host,
+		Addr:        config.Host + ":" + config.Port,
 		Password:    config.Password,
 		DB:          config.Database,
 		DialTimeout: time.Second * 3,

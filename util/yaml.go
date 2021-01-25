@@ -6,7 +6,7 @@
 package util
 
 import (
-	"encoding/json"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
 )
 
@@ -15,7 +15,7 @@ func ParseYaml(yamlFileAddr string, data interface{}) error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal(yamlFile, data); err != nil {
+	if err := yaml.Unmarshal(yamlFile, data); err != nil {
 		return err
 	}
 	return nil

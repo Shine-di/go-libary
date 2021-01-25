@@ -17,7 +17,7 @@ import (
 type Order string
 
 // 需要执行的 func
-type OptionFunc func() error
+type Func func() error
 
 const (
 	Before Order = "before"
@@ -26,27 +26,36 @@ const (
 
 //节点启动的 流程
 type Node struct {
-	Jobs       []job.Job // 定时任务
 	NodeName   string
-	Options    []Option
-	beforeFunc []OptionFunc
-	afterFunc  []OptionFunc
+	options    *Options
+	beforeFunc []Func
+	afterFunc  []Func
+}
+
+func New(name string, option *Options) *Node {
+	if option == nil {
+		return defaultNode(name)
+	}
+	return &Node{
+		NodeName: name,
+		options:  option,
+	}
 }
 
 // 默认参数
-func (n *Node) defaultNode() Node {
-	return Node{
-		Jobs:       []job.Job{},
-		NodeName:   "",
-		Options:    nil,
-		beforeFunc: []OptionFunc{},
-		afterFunc:  []OptionFunc{},
+func defaultNode(name string) *Node {
+	return &Node{
+		options: &Options{
+			Jobs:    []job.Job{},
+			Options: nil,
+		},
+		NodeName: name,
 	}
 }
 
 func (n *Node) Init(env svc.Environment) error {
-	if n.Options != nil && len(n.Options) > 0 {
-		for _, e := range n.Options {
+	if n.options.Options != nil && len(n.options.Options) > 0 {
+		for _, e := range n.options.Options {
 			switch e.GetOrder() {
 			case Before:
 				n.beforeFunc = append(n.beforeFunc, e.GetOptionFunc())
@@ -79,12 +88,12 @@ func (n *Node) Start() error {
 		}
 	}
 	// 执行定时任务
-	if len(n.Jobs) > 0 {
+	if len(n.options.Jobs) > 0 {
 		c := cron.New(
 			cron.WithSeconds(),
 			cron.WithChain(cron.Recover(cron.DefaultLogger)),
 		)
-		for _, e := range n.Jobs {
+		for _, e := range n.options.Jobs {
 			if e.DoFirst() {
 				go e.Run()
 			}

@@ -6,12 +6,34 @@
 package config
 
 import (
+	"fmt"
 	"github.com/dishine/libary/mongo"
 	"github.com/dishine/libary/mysql"
 	"github.com/dishine/libary/oss"
 	"github.com/dishine/libary/redis"
+	"github.com/dishine/libary/util"
 	"os"
 )
+
+type Yaml struct {
+	Mysql *mysql.Config `json:"mysql" yaml:"mysql"`
+	Mongo *mongo.Config `json:"mongo" yaml:"mongo"`
+	Redis *redis.Config `json:"redis" yaml:"redis"`
+}
+
+// 环境加后缀
+func ParseConfig(name string) *Yaml {
+	if name != "" {
+		name = "config/" + GetEnv() + "-" + name + ".yaml"
+	} else {
+		name = "config/" + GetEnv() + ".yaml"
+	}
+	config := new(Yaml)
+	if err := util.ParseYaml(name, config); err != nil {
+		panic(fmt.Sprintf("解析配置文件错误%v", err.Error()))
+	}
+	return config
+}
 
 const (
 	RELEASE = "release"
@@ -51,6 +73,9 @@ var (
 	OSS_ADDRESS string
 )
 
+func SetEnv(env string) {
+	_ = os.Setenv("ENVIRON", env)
+}
 func GetEnv() string {
 	return os.Getenv("ENVIRON")
 }
@@ -68,7 +93,7 @@ func init() {
 		MONGO_ADDRESS = HOST_LOCAL + ":27020"
 		OSS_ADDRESS = "http://" + OSS_LOCAL
 	default:
-		panic("启动环境错误")
+		//panic("启动环境错误")
 
 	}
 }
