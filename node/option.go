@@ -13,6 +13,6 @@ type OptionFunc interface {
 }
 
 type Options struct {
-	Jobs    []job.Job // 定时任务
 	Options []OptionFunc
+	Jobs    []job.Job // 定时任务
 }
