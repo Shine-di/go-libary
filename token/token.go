@@ -60,16 +60,16 @@ var (
 		//},
 		//
 		N_TEST_USER_1: {
-			//RATE,
+			RATE,
 		},
 		N_TEST_USER_2: {
-			//RATE,
+			RATE,
 		},
 		N_TEST_USER_3: {
-			//RATE,
+			RATE,
 		},
 		N_TEST_USER_4: {
-			//RATE,
+			RATE,
 		},
 		N_TEST_USER_6: {
 			RATE,
