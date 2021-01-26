@@ -6,12 +6,10 @@
 package config
 
 import (
-	"fmt"
 	"github.com/dishine/libary/mongo"
 	"github.com/dishine/libary/mysql"
 	"github.com/dishine/libary/oss"
 	"github.com/dishine/libary/redis"
-	"github.com/dishine/libary/util"
 	"os"
 )
 
@@ -46,20 +44,21 @@ type Yaml struct {
 	Redis *redis.Config `json:"redis" yaml:"redis"`
 }
 
-// 环境加后缀
-func init() {
-	name := ""
-	if IsLocal() {
-		name = "config/" + GetEnv() + "-" + name + ".yaml"
-	} else {
-		name = "config/" + GetEnv() + ".yaml"
-	}
-	config := new(Yaml)
-	if err := util.ParseYaml(name, config); err != nil {
-		panic(fmt.Sprintf("解析配置文件错误: %v", err.Error()))
-	}
-	Config = config
-}
+//
+//// 环境加后缀
+//func init() {
+//	name := ""
+//	if IsLocal() {
+//		name = "config/" + GetEnv() + "-" + name + ".yaml"
+//	} else {
+//		name = "config/" + GetEnv() + ".yaml"
+//	}
+//	config := new(Yaml)
+//	if err := util.ParseYaml(name, config); err != nil {
+//		panic(fmt.Sprintf("解析配置文件错误: %v", err.Error()))
+//	}
+//	Config = config
+//}
 
 func init() {
 	switch GetEnv() {
