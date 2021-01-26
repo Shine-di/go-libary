@@ -21,24 +21,14 @@ const (
 	RATE gameAuth = "rate"
 	// 自己测试用的token
 	TEST = "G5WaoTMYDuINAMVIQVmjANVhzCgDVT4AxPL9fAmMmSRCP6N8gE"
-	// 商户 1
-	USER_ONE = "D67lL1AYF2j9bXMy80RNaTU43fIQpPOzxrmscKdG5SvoCBtEHhZnwgJ"
-	//USER_ONE = "zqcvN2BAjeao083yLZbVtOCSXDU4isJ57pKFh6PHmgIEdx9klw"
-	// 商户测试1
-	TEST_USER_1 = "TBoKrJFIkR87uxg6zawUADX1lH5tci9QS3fMjneWmEdZs2GNqOpL4P0"
-	//TEST_USER_1 = "1iYjxTJHn7sN3eBqbmtzpklLaS65OVDvuR0UXrc8PFCMK"
-	// 商户测试2
-	TEST_USER_2 = "krulfOFQIHEiMhGCYW21tTZ3XgjNBsUS4xezonwVAJPK8pLRdq7Dav0"
-	//TEST_USER_2 = "YKHphjw0TEoqzsxgQeA1C5MavDc4lOmt6duy29b7S8RLG"
-
-	N_TEST_USER_1 = "jdIHUN9v39xew5zSBue66Dv2vvJctxBoNGdJ2F0raK3qpUc9dC"
-	N_TEST_USER_2 = "HHFov9ZWuiJ7OiFgnlXBsRSOnKKd12ypbSGQDC4zZNThqwu48f"
-	N_TEST_USER_3 = "c1SzcAnRLwAaL6U6tgfazFdbszwbjxyyeBjC26PV3xmYHCC1hQ"
-	N_TEST_USER_4 = "0C2Y7jd7f1XT7IbiJ40VOOvBL9v428HBxDysskeZZA2JiV49N4"
-	N_TEST_USER_5 = "vRvKzJYUYNPwvpu2jrgbK5ngDJ7cj41Uk6IBnlxD8WM0tdjbCs"
 
 	// 正式的商户1 海南
 	N_TEST_USER_6 = "2e5Xp9V2vuSMY7sfNR9QiwmIO8xxjCNqnJJzSSCzJd1kCaKSzn"
+
+	N_TEST_USER_1 = "f1sv9BLGDUPXyeIdYuY0mgRfcthXifFGLVB14vVwniVc79NndV"
+	N_TEST_USER_2 = "v5vB3h74Tptd9k16Gs84qaeQQMuQYqOk7SrA3Dfu5Lsm7v7bb9"
+	N_TEST_USER_3 = "orxSUKhb7pLg4drzLMXV9TMmRsOCk1KO2vnz4ZppmBlnwfHqmf"
+	N_TEST_USER_4 = "q8vQZXx3xeds35Zj3uaewQFjpsw8BUWcOHKqlhVBaG1N9mnaPC"
 )
 
 var (
@@ -69,18 +59,18 @@ var (
 		//	//KOG,
 		//},
 		//
-		//N_TEST_USER_1: {
-		//	//RATE,
-		//},
-		//N_TEST_USER_2: {
-		//	//RATE,
-		//},
-		//N_TEST_USER_3: {
-		//	//RATE,
-		//},
-		//N_TEST_USER_4: {
-		//	//RATE,
-		//},
+		N_TEST_USER_1: {
+			//RATE,
+		},
+		N_TEST_USER_2: {
+			//RATE,
+		},
+		N_TEST_USER_3: {
+			//RATE,
+		},
+		N_TEST_USER_4: {
+			//RATE,
+		},
 		N_TEST_USER_6: {
 			RATE,
 		},
