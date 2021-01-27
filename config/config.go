@@ -50,7 +50,7 @@ type Yaml struct {
 func init() {
 	name := ""
 	if IsLocal() {
-		name = "config/" + GetEnv() + "-" + name + ".yaml"
+		name = "config/" + GetEnv() + "-" + "local" + ".yaml"
 	} else {
 		name = "config/" + GetEnv() + ".yaml"
 	}
