@@ -7,11 +7,13 @@ package config
 
 import (
 	"fmt"
+	"github.com/dishine/libary/log"
 	"github.com/dishine/libary/mongo"
 	"github.com/dishine/libary/mysql"
 	"github.com/dishine/libary/oss"
 	"github.com/dishine/libary/redis"
 	"github.com/dishine/libary/util"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -48,6 +50,9 @@ type Yaml struct {
 
 // 环境加后缀
 func init() {
+	log.Info("启动环境", zap.String("ENVIRON", GetEnv()))
+
+	log.Info("启动位置", zap.String("LOCATION", GetLocation()))
 	name := ""
 	if IsLocal() {
 		name = "config/" + GetEnv() + "-" + "local" + ".yaml"
