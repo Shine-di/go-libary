@@ -74,3 +74,28 @@ type Job interface {
 	DoFirst() bool
 	cron.Job
 }
+
+type Func struct {
+	t    string
+	f    bool
+	Func func()
+}
+
+func NewFunc(t string, doFirst bool, f func()) *Func {
+	return &Func{
+		t:    t,
+		f:    doFirst,
+		Func: f,
+	}
+}
+
+func (f *Func) GetSpec() string {
+	return f.t
+}
+func (f *Func) DoFirst() bool {
+	return f.f
+}
+
+func (f *Func) Run() {
+	f.Func()
+}
