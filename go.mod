@@ -7,7 +7,7 @@ require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.4+incompatible
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
-	github.com/gin-contrib/cors v1.3.1 // indirect
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gorilla/websocket v1.4.2
@@ -16,7 +16,8 @@ require (
 	github.com/judwhite/go-svc v1.1.3
 	github.com/onsi/ginkgo v1.14.2 // indirect
 	github.com/onsi/gomega v1.10.4 // indirect
-	github.com/opentracing-contrib/go-gin v0.0.0-20201220185307-1dd2273433a4 // indirect
+	github.com/opentracing-contrib/go-gin v0.0.0-20201220185307-1dd2273433a4
+	github.com/opentracing/opentracing-go v1.2.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/royeo/dingrobot v1.0.0
 	github.com/satori/go.uuid v1.2.0 // indirect
