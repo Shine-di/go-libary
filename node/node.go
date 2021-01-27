@@ -87,7 +87,7 @@ func (n *Node) Start() error {
 	// 启动http
 	if n.options.HttpPort != "" {
 		go func() {
-			if err := n.options.Router.Engine.Run(); err != nil {
+			if err := n.options.Router.Engine.Run(n.options.HttpPort); err != nil {
 				panic(fmt.Sprintf("run web api err: %v", err.Error()))
 			}
 		}()
