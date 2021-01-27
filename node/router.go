@@ -25,6 +25,7 @@ func NewRouter(middleware ...gin.HandlerFunc) *Router {
 }
 
 func defaultRouter() *Router {
+	gin.SetMode(gin.ReleaseMode)
 	r := &Router{
 		Middlewares: nil,
 		Engine:      gin.Default(),
