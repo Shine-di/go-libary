@@ -46,14 +46,19 @@ func New(name string, option *Options) *Node {
 func defaultNode(name string) *Node {
 	return &Node{
 		options: &Options{
-			Jobs:    []job.Job{},
-			Options: nil,
+			Options:  nil,
+			HttpPort: "",
+			Router:   nil,
+			Jobs:     []job.Job{},
 		},
 		NodeName: name,
 	}
 }
 
 func (n *Node) Init(env svc.Environment) error {
+	if n.options.HttpPort != "" && n.options.Router == nil {
+		return errors.New("web api param err: router is nil")
+	}
 	if n.options.Options != nil && len(n.options.Options) > 0 {
 		for _, e := range n.options.Options {
 			switch e.GetOrder() {
@@ -78,6 +83,14 @@ func (n *Node) Start() error {
 				return err
 			}
 		}
+	}
+	// 启动http
+	if n.options.HttpPort != "" {
+		go func() {
+			if err := n.options.Router.Engine.Run(); err != nil {
+				panic(fmt.Sprintf("run web api err: %v", err.Error()))
+			}
+		}()
 	}
 	// 执行之后的任务
 	if len(n.afterFunc) > 0 {

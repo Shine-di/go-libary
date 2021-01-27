@@ -8,8 +8,10 @@ package node
 import "github.com/dishine/libary/job"
 
 type Options struct {
-	Options []OptionFunc
-	Jobs    []job.Job // 定时任务
+	Options  []OptionFunc
+	HttpPort string
+	Router   *Router
+	Jobs     []job.Job // 定时任务
 }
 
 type OptionFunc interface {
