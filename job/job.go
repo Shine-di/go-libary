@@ -81,7 +81,7 @@ type Func struct {
 	Func func()
 }
 
-func NewFunc(t string, doFirst bool, f func()) *Func {
+func NewFunc(t string, f func(), doFirst bool) *Func {
 	return &Func{
 		t:    t,
 		f:    doFirst,
