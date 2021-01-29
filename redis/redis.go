@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/dishine/libary/log"
@@ -84,6 +85,24 @@ func InitRedis(config *Config) {
 		panic(err.Error())
 	}
 	log.Info("load redis success", zap.String("conn", config.Host))
+}
+
+func (r *Redis) GetStruct(prefix PrefixEnum, key string, data interface{}) error {
+	key = getKey(prefix, key)
+	s, err := r.GetValue(prefix, key)
+	if err != nil {
+		return err
+	}
+	if err := json.Unmarshal([]byte(s), data); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *Redis) SaveStruct(prefix PrefixEnum, key string, data interface{}, expire time.Duration) error {
+	key = getKey(prefix, key)
+	b, _ := json.Marshal(data)
+	return r.Client.Set(key, string(b), expire).Err()
 }
 
 // Get returns the value saved under a given key.
