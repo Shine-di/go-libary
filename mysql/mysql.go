@@ -21,9 +21,10 @@ type Config struct {
 }
 
 var (
-	conn       *gorm.DB
-	lock       = &sync.Mutex{}
-	onceLoadDb sync.Once
+	conn              *gorm.DB
+	lock              = &sync.Mutex{}
+	onceLoadDb        sync.Once
+	ErrRecordNotFound = gorm.ErrRecordNotFound
 )
 
 func Conn() *gorm.DB {
