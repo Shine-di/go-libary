@@ -66,6 +66,21 @@ func init() {
 	Config = config
 }
 
+func Init(data interface{}) {
+	log.Info("启动环境", zap.String("ENVIRON", GetEnv()))
+
+	log.Info("启动位置", zap.String("LOCATION", GetLocation()))
+	name := ""
+	if IsLocal() {
+		name = "config/" + GetEnv() + "-" + "local" + ".yaml"
+	} else {
+		name = "config/" + GetEnv() + ".yaml"
+	}
+	if err := util.ParseYaml(name, data); err != nil {
+		panic(fmt.Sprintf("解析配置文件错误: %v", err.Error()))
+	}
+}
+
 func init() {
 	switch GetEnv() {
 	case RELEASE:
