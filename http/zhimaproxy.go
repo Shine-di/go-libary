@@ -28,10 +28,20 @@ type ProxyIp struct {
 	ExpireTime string `json:"expire_time"` //2021-02-18 19:11:02
 }
 
-var ZhiMa *ZhiMaProxy
+var (
+	ZhiMa         *ZhiMaProxy
+	useZhiMaProxy = true
+)
 
-func InIt(addr string) error {
-	ZhiMa = NewZhiMaProxy(addr)
+func InItZhiMaProxy(addr string, useProxy ...bool) error {
+	if len(useProxy) > 0 {
+		useZhiMaProxy = useProxy[0]
+		if useProxy[0] {
+			ZhiMa = NewZhiMaProxy(addr)
+		}
+	} else {
+		ZhiMa = NewZhiMaProxy(addr)
+	}
 	return nil
 }
 
@@ -51,7 +61,9 @@ func NewZhiMaProxy(addr string) *ZhiMaProxy {
 		index:    11,
 		ips:      map[string]int64{},
 	}
-	_ = zhiMa.LoadIp()
+	if !useZhiMaProxy {
+		_ = zhiMa.LoadIp()
+	}
 	return zhiMa
 }
 
@@ -91,6 +103,9 @@ func (z *ZhiMaProxy) LoadIp() error {
 	return nil
 }
 func (z *ZhiMaProxy) checkIp() {
+	if !useZhiMaProxy {
+		return
+	}
 	z.lock.Lock()
 	if len(z.ips) == 0 {
 		z.lock.Unlock()
@@ -108,6 +123,9 @@ func (z *ZhiMaProxy) checkIp() {
 	}
 }
 func (z *ZhiMaProxy) GetIp() string {
+	if !useZhiMaProxy {
+		return ""
+	}
 	z.lock.Lock()
 	if len(z.ips) == 0 {
 		z.lock.Unlock()

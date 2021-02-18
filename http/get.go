@@ -7,6 +7,8 @@ package http
 
 import (
 	"fmt"
+	"github.com/dishine/libary/log"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -41,6 +43,7 @@ func (r *GET) Do() ([]byte, error) {
 	if r.UseProxy && r.Proxy == "" {
 		proxyIp := getProxy()
 		if proxyIp != "" {
+			log.Info("使用代理", zap.Any("ip", proxyIp))
 			u, _ := url.Parse(proxyIp)
 			client.Transport = &http.Transport{
 				Proxy: http.ProxyURL(u),
@@ -48,6 +51,7 @@ func (r *GET) Do() ([]byte, error) {
 		}
 	}
 	if r.Proxy != "" {
+		log.Info("使用代理", zap.Any("ip", r.Proxy))
 		u, _ := url.Parse(r.Proxy)
 		client.Transport = &http.Transport{
 			Proxy: http.ProxyURL(u),
