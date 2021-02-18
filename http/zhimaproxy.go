@@ -61,7 +61,7 @@ func NewZhiMaProxy(addr string) *ZhiMaProxy {
 		index:    11,
 		ips:      map[string]int64{},
 	}
-	if !useZhiMaProxy {
+	if useZhiMaProxy {
 		_ = zhiMa.LoadIp()
 	}
 	return zhiMa
@@ -92,7 +92,7 @@ func (z *ZhiMaProxy) LoadIp() error {
 	for _, e := range zhiMaResp.Data {
 		t, _ := time.ParseInLocation(cst.TIME_STAMP, e.ExpireTime, time.Local)
 		t.Unix()
-		proxyIp := "https://" + e.IP + ":" + fmt.Sprint(e.Port)
+		proxyIp := "http://" + e.IP + ":" + fmt.Sprint(e.Port)
 		_, ok := z.ips[proxyIp]
 		if ok {
 			z.ips[proxyIp] = t.Unix()
@@ -133,6 +133,7 @@ func (z *ZhiMaProxy) GetIp() string {
 			log.Info("获取新的ip错误", zap.Error(err))
 			return ""
 		}
+		return ""
 	}
 	defer z.lock.Unlock()
 	t := time.Now().Unix()
