@@ -12,6 +12,7 @@ import (
 )
 
 const (
+	SecondPer1  = "*/1 * * * * ?"
 	SecondPer5  = "*/5 * * * * ?"
 	SecondPer10 = "*/10 * * * * ?"
 	SecondPer30 = "*/30 * * * * ?"
