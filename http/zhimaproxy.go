@@ -91,7 +91,6 @@ func (z *ZhiMaProxy) LoadIp() error {
 	defer z.lock.Unlock()
 	for _, e := range zhiMaResp.Data {
 		t, _ := time.ParseInLocation(cst.TIME_STAMP, e.ExpireTime, time.Local)
-		t.Unix()
 		proxyIp := "http://" + e.IP + ":" + fmt.Sprint(e.Port)
 		_, ok := z.ips[proxyIp]
 		if ok {
