@@ -145,3 +145,18 @@ func (z *ZhiMaProxy) GetIp() string {
 	}
 	return ""
 }
+
+func (z *ZhiMaProxy) DeleteIp(ip string) {
+	if !useZhiMaProxy {
+		return
+	}
+	z.lock.Lock()
+	defer z.lock.Unlock()
+	if len(z.ips) == 0 {
+		return
+	}
+	_, ok := z.ips[ip]
+	if ok {
+		delete(z.ips, ip)
+	}
+}
