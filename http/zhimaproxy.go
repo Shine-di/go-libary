@@ -155,8 +155,10 @@ func (z *ZhiMaProxy) DeleteIp(ip string) {
 	if len(z.ips) == 0 {
 		return
 	}
+	log.Info("变更之前的ip",zap.Any("ip池",z.ips))
 	_, ok := z.ips[ip]
 	if ok {
 		delete(z.ips, ip)
 	}
+	log.Info("变更之后的ip",zap.Any("ip池",z.ips))
 }
