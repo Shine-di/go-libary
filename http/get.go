@@ -6,6 +6,7 @@
 package http
 
 import (
+	"crypto/tls"
 	"fmt"
 	"github.com/dishine/libary/log"
 	"go.uber.org/zap"
@@ -13,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 type GET struct {
@@ -46,7 +48,8 @@ func (r *GET) Do() ([]byte, error) {
 			log.Info("使用代理", zap.Any("ip", proxyIp))
 			u, _ := url.Parse(proxyIp)
 			client.Transport = &http.Transport{
-				Proxy: http.ProxyURL(u),
+				Proxy:           http.ProxyURL(u),
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 			}
 		}
 	}
@@ -54,9 +57,17 @@ func (r *GET) Do() ([]byte, error) {
 		log.Info("使用代理", zap.Any("ip", r.Proxy))
 		u, _ := url.Parse(r.Proxy)
 		client.Transport = &http.Transport{
-			Proxy: http.ProxyURL(u),
+			Proxy:           http.ProxyURL(u),
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 	}
+	client.Timeout = 10 * time.Second
+	if client.Transport == nil {
+		client.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+	}
+
 	req, _ := http.NewRequest("GET", r.URL, nil)
 	for k, v := range r.Header {
 		req.Header.Add(k, v)
