@@ -68,7 +68,9 @@ func NewZhiMaProxy(addr []string) *ZhiMaProxy {
 }
 
 func (z *ZhiMaProxy) LoadIp() error {
+
 	i := z.index % len(z.zhiMaUrl)
+	z.index = z.index + 1
 	get := GET{
 		URL:      z.zhiMaUrl[i],
 		Header:   nil,
@@ -137,8 +139,10 @@ func (z *ZhiMaProxy) GetIp() string {
 	}
 	defer z.lock.Unlock()
 	t := time.Now().Unix()
+	log.Info("变更之前的ip", zap.Any("ip池", z.ips))
 	for k, v := range z.ips {
 		if v < t {
+			log.Info("变更之前的ip", zap.Any("ip池", z.ips))
 			delete(z.ips, k)
 			continue
 		}
