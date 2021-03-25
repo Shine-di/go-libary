@@ -33,7 +33,7 @@ var (
 	useZhiMaProxy = true
 )
 
-func InItZhiMaProxy(addr string, useProxy ...bool) error {
+func InItZhiMaProxy(addr []string, useProxy ...bool) error {
 	if len(useProxy) > 0 {
 		useZhiMaProxy = useProxy[0]
 		if useProxy[0] {
@@ -48,13 +48,13 @@ func InItZhiMaProxy(addr string, useProxy ...bool) error {
 //http://webapi.http.zhimacangku.com/getip?num=10&type=2&pro=0&city=0&yys=0&port=11&time=1&ts=1&ys=0&cs=0&lb=1&sb=0&pb=4&mr=1&regions=110000,130000,140000,210000,220000,230000,310000,320000,330000,340000,350000,360000,370000,410000,420000,430000,440000,450000,500000,510000,520000,530000,610000,640000
 
 type ZhiMaProxy struct {
-	zhiMaUrl string
+	zhiMaUrl []string
 	lock     sync.RWMutex
 	index    int
 	ips      map[string]int64 // key为代理ip value 为过期时间
 }
 
-func NewZhiMaProxy(addr string) *ZhiMaProxy {
+func NewZhiMaProxy(addr []string) *ZhiMaProxy {
 	zhiMa := &ZhiMaProxy{
 		zhiMaUrl: addr,
 		lock:     sync.RWMutex{},
@@ -68,8 +68,11 @@ func NewZhiMaProxy(addr string) *ZhiMaProxy {
 }
 
 func (z *ZhiMaProxy) LoadIp() error {
+
+	i := z.index % len(z.zhiMaUrl)
+	z.index = z.index + 1
 	get := GET{
-		URL:      z.zhiMaUrl,
+		URL:      z.zhiMaUrl[i],
 		Header:   nil,
 		Params:   nil,
 		UseProxy: false,
@@ -136,12 +139,31 @@ func (z *ZhiMaProxy) GetIp() string {
 	}
 	defer z.lock.Unlock()
 	t := time.Now().Unix()
+	log.Info("变更之前的ip", zap.Any("ip池", z.ips))
 	for k, v := range z.ips {
 		if v < t {
+			log.Info("变更之前的ip", zap.Any("ip池", z.ips))
 			delete(z.ips, k)
 			continue
 		}
 		return k
 	}
 	return ""
+}
+
+func (z *ZhiMaProxy) DeleteIp(ip string) {
+	if !useZhiMaProxy {
+		return
+	}
+	z.lock.Lock()
+	defer z.lock.Unlock()
+	if len(z.ips) == 0 {
+		return
+	}
+	log.Info("变更之前的ip", zap.Any("ip池", z.ips))
+	_, ok := z.ips[ip]
+	if ok {
+		delete(z.ips, ip)
+	}
+	log.Info("变更之后的ip", zap.Any("ip池", z.ips))
 }
