@@ -29,12 +29,12 @@ func NewDingBot(webHook, sign string) *DingBot {
 	}
 }
 
-func (d *DingBot) SendTest(content string) {
+func (d *DingBot) SendTest(content string, isAtAll bool) {
 	time.Sleep(500 * time.Millisecond)
 	ts, sign := d.sign(d.Sign)
 	webhook := fmt.Sprintf("%s&timestamp=%d&sign=%s", d.WebHook, ts, sign)
 	robot := dingrobot.NewRobot(webhook)
-	err := robot.SendText(content, []string{}, false)
+	err := robot.SendText(content, []string{}, isAtAll)
 	if err != nil {
 		log.Error("钉钉消息发送失败", zap.Error(err))
 	}
