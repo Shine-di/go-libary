@@ -61,7 +61,7 @@ func (r *GET) Do() ([]byte, error) {
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 	}
-	client.Timeout = 10 * time.Second
+	client.Timeout = 20 * time.Second
 	if client.Transport == nil {
 		client.Transport = &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
