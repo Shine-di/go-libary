@@ -54,9 +54,9 @@ func (wss *WSService) readMessage(con *websocket.Conn) {
 	for {
 		_, message, err := con.ReadMessage()
 		if err != nil {
+			con.Close()
 			wss.Binder.Mux.Lock()
 			delete(wss.Binder.ConMap, wss.Ip)
-			con.Close()
 			wss.Binder.Mux.Unlock()
 			log.Info(fmt.Sprintf("tag %v ip %v read message err %v ", wss.Tag, wss.Ip, err))
 			return
