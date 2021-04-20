@@ -48,8 +48,8 @@ func InitConnect(config *Config) {
 		return
 	} else {
 		log.Info("load mysql success", zap.String("conn", host))
-		db.DB().SetMaxIdleConns(5)
-		db.DB().SetMaxOpenConns(20)
+		db.DB().SetMaxIdleConns(10)
+		db.DB().SetMaxOpenConns(100)
 		db.SingularTable(true)
 		conn = db
 	}
