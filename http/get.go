@@ -24,6 +24,7 @@ type GET struct {
 	UseProxy bool
 	Proxy    string
 	Token    string
+	InsecureSkipVerify  bool
 }
 
 func (r *GET) Do() ([]byte, error) {
@@ -42,32 +43,25 @@ func (r *GET) Do() ([]byte, error) {
 		}
 		r.URL = r.URL + "?" + strings.Join(s, "&")
 	}
+	transport := &http.Transport{}
 	if r.UseProxy && r.Proxy == "" {
 		proxyIp := getProxy()
 		if proxyIp != "" {
 			log.Info("使用代理", zap.Any("ip", proxyIp))
 			u, _ := url.Parse(proxyIp)
-			client.Transport = &http.Transport{
-				Proxy:           http.ProxyURL(u),
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			}
+			transport.Proxy = http.ProxyURL(u)
 		}
 	}
 	if r.Proxy != "" {
 		log.Info("使用代理", zap.Any("ip", r.Proxy))
 		u, _ := url.Parse(r.Proxy)
-		client.Transport = &http.Transport{
-			Proxy:           http.ProxyURL(u),
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
+		transport.Proxy = http.ProxyURL(u)
+	}
+	if r.InsecureSkipVerify {
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 	client.Timeout = 20 * time.Second
-	if client.Transport == nil {
-		client.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-	}
-
+	client.Transport = transport
 	req, _ := http.NewRequest("GET", r.URL, nil)
 	for k, v := range r.Header {
 		req.Header.Add(k, v)
