@@ -63,11 +63,11 @@ func (wss *WSService) readMessage(con *websocket.Conn) {
 		}
 		log.Info(fmt.Sprintf("tag %v ip %v message %v ", wss.Tag, wss.Ip, string(message)))
 		if err := con.WriteMessage(websocket.TextMessage, []byte(`pong`)); err != nil {
+			con.Close()
 			wss.Binder.Mux.Lock()
 			delete(wss.Binder.ConMap, wss.Ip)
 			wss.Binder.Mux.Unlock()
 			log.Info(fmt.Sprintf("ip %v send pong err %v ", wss.Ip, err))
-			con.Close()
 			return
 		}
 	}
