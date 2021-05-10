@@ -17,6 +17,10 @@ import (
 	"time"
 )
 
+var(
+	transport = &http.Transport{}
+)
+
 type GET struct {
 	URL      string
 	Header   map[string]string
@@ -43,7 +47,6 @@ func (r *GET) Do() ([]byte, error) {
 		}
 		r.URL = r.URL + "?" + strings.Join(s, "&")
 	}
-	transport := &http.Transport{}
 	if r.UseProxy && r.Proxy == "" {
 		proxyIp := getProxy()
 		if proxyIp != "" {
