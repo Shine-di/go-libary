@@ -26,14 +26,12 @@ type POST struct {
 	Proxy    string
 }
 
-var client = new(http.Client)
 
 func (r *POST) Do() ([]byte, error) {
 	if r.Proxy != "" {
 		u, _ := url.Parse(r.Proxy)
-		client.Transport = &http.Transport{
-			Proxy: http.ProxyURL(u),
-		}
+		transport.Proxy = http.ProxyURL(u)
+		client .Transport = transport
 	}
 	if r.Params != nil {
 		s := make([]string, 0)

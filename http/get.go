@@ -18,7 +18,8 @@ import (
 )
 
 var(
-	transport = &http.Transport{}
+	transport = new(http.Transport)
+	client = new(http.Client)
 )
 
 type GET struct {
@@ -39,7 +40,7 @@ func (r *GET) Do() ([]byte, error) {
 		l.RawQuery = q.Encode()
 		r.URL = l.String()
 	}
-	client := new(http.Client)
+
 	if r.Params != nil {
 		s := make([]string, 0)
 		for k, v := range r.Params {
