@@ -19,7 +19,7 @@ import (
 
 var(
 	transport = new(http.Transport)
-	client = new(http.Client)
+	client = http.DefaultClient
 )
 
 type GET struct {
