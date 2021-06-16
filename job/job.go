@@ -15,6 +15,7 @@ const (
 	SecondPer1  = "*/1 * * * * ?"
 	SecondPer5  = "*/5 * * * * ?"
 	SecondPer10 = "*/10 * * * * ?"
+	SecondPer15 = "*/15 * * * * ?"
 	SecondPer30 = "*/30 * * * * ?"
 
 	HourPer1 = "0 0 */1 * * ?"
