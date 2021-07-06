@@ -19,10 +19,8 @@ const (
 	KOG  gameAuth = "kog"
 
 	RATE gameAuth = "rate"
-	// 自己测试用的token
 	TEST = "G5WaoTMYDuINAMVIQVmjANVhzCgDVT4AxPL9fAmMmSRCP6N8gE"
 
-	// 正式的商户1 海南
 	//N_TEST_USER_6 = "2e5Xp9V2vuSMY7sfNR9QiwmIO8xxjCNqnJJzSSCzJd1kCaKSzn"
 
 	N_TEST_USER_1 = "f1sv9BLGDUPXyeIdYuY0mgRfcthXifFGLVB14vVwniVc79NndV"
@@ -59,6 +57,9 @@ func init()  {
 		N_TEST_USER_3: {
 			RATE,
 		},
+		N_TEST_USER_4: {
+			RATE,
+		},
 		N_TEST_USER_5: {
 			RATE,
 		},
@@ -74,10 +75,8 @@ func init()  {
 		N_TEST_USER_9: {
 			RATE,
 		},
-
 	}
 }
-
 func TokenMiddleware(game gameAuth) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.DefaultQuery("token", "")
@@ -109,24 +108,3 @@ func auth(game gameAuth, auths []gameAuth) bool {
 	}
 	return false
 }
-
-//func SyncToken( enum redis.PrefixEnum) error {
-//	go func() {
-//		for {
-//			r := redis.GetRedis()
-//			if r == nil {
-//				log.Warn("连接redis错误")
-//				continue
-//			}
-//			key := fmt.Sprintf("HTTP-APT-TOKEN")
-//			d,err := r.GetValue(enum,key)
-//			if err != nil {
-//				log.Info("同步token错误",zap.Error(err))
-//				continue
-//			}
-//
-//			<- time.After(time.Minute)
-//		}
-//	}()
-//	return nil
-//}
