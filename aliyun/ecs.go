@@ -4,8 +4,3 @@
  */
 
 package aliyun
-//中国深圳
-//AccessKey ID
-//LTAI5tSJf34xoap94EFh7hDX
-//AccessKey Secret
-//QhUJmLnUYrICFsDJFPSRtodhTL4NOQ
