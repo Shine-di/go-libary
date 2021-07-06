@@ -10,74 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type gameAuth string
+type GameAuth string
 
-const (
-	LOL  gameAuth = "lol"
-	DOTA gameAuth = "dota2"
-	CSGO gameAuth = "csgo"
-	KOG  gameAuth = "kog"
 
-	RATE gameAuth = "rate"
-	TEST = "G5WaoTMYDuINAMVIQVmjANVhzCgDVT4AxPL9fAmMmSRCP6N8gE"
-
-	//N_TEST_USER_6 = "2e5Xp9V2vuSMY7sfNR9QiwmIO8xxjCNqnJJzSSCzJd1kCaKSzn"
-
-	N_TEST_USER_1 = "f1sv9BLGDUPXyeIdYuY0mgRfcthXifFGLVB14vVwniVc79NndV"
-	N_TEST_USER_2 = "v5vB3h74Tptd9k16Gs84qaeQQMuQYqOk7SrA3Dfu5Lsm7v7bb9"
-	N_TEST_USER_3 = "orxSUKhb7pLg4drzLMXV9TMmRsOCk1KO2vnz4ZppmBlnwfHqmf"
-	N_TEST_USER_4 = "q8vQZXx3xeds35Zj3uaewQFjpsw8BUWcOHKqlhVBaG1N9mnaPC"
-
-	//20210706 更新
-	N_TEST_USER_5 = "t9uNipkLF3XYEyPh37s8MPUfTPQt9sE0jQKANmpiafD9AJBntT"
-	N_TEST_USER_6 = "QwHdDkUY74VSauoHLNmsud4LVZJ8pzk8t1CiweoIV1illqZRfU"
-	N_TEST_USER_7 = "4PXo7Bm4HQlLrOzI4RtuQbu616jjpqxJPWtME3lRqg3aqUdFJ9"
-	N_TEST_USER_8 = "MqlqZ28IJTBw4o7llkOvdU33ulEiAdd7CscUDHUtH4h0FtrxI2"
-	N_TEST_USER_9 = "3QRlMRyFK1yEAZhsnFrLZayVRjAHcSo1cvcKiWoJfixyxcrGEt"
-)
-
-var (
-	tokenMap = map[string][]gameAuth{}
-)
-func init()  {
-	tokenMap = map[string][]gameAuth{
-		TEST: {
-			LOL,
-			DOTA,
-			CSGO,
-			KOG,
-			RATE,
-		},
-		N_TEST_USER_1: {
-			RATE,
-		},
-		//N_TEST_USER_2: {
-		//	RATE,
-		//},
-		N_TEST_USER_3: {
-			RATE,
-		},
-		N_TEST_USER_4: {
-			RATE,
-		},
-		N_TEST_USER_5: {
-			RATE,
-		},
-		N_TEST_USER_6: {
-			RATE,
-		},
-		N_TEST_USER_7: {
-			RATE,
-		},
-		N_TEST_USER_8: {
-			RATE,
-		},
-		N_TEST_USER_9: {
-			RATE,
-		},
-	}
-}
-func TokenMiddleware(game gameAuth) gin.HandlerFunc {
+func TokenMiddleware(game GameAuth,tokenMap map[string][]GameAuth) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.DefaultQuery("token", "")
 		if token == "" {
@@ -100,7 +36,7 @@ func TokenMiddleware(game gameAuth) gin.HandlerFunc {
 	}
 }
 
-func auth(game gameAuth, auths []gameAuth) bool {
+func auth(game GameAuth, auths []GameAuth) bool {
 	for _, e := range auths {
 		if e == game {
 			return true
